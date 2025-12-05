@@ -1,0 +1,10 @@
+# .gitignore
+
+# Python仮想環境の無視
+venv/
+__pycache__/
+*.pyc
+
+# IDEの設定ファイル
+.idea/
+.vscode/
