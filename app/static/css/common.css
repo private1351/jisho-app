@@ -1,0 +1,40 @@
+/* 共通スタイル */
+/* 背景色: #F7F6EB */
+body {
+  background-color: #F7F6EB;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* フォント: ヒラギノ明朝体（明朝体） */
+body {
+    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+}
+
+/* テキストサイズ: 14px */
+body { font-size: 14px; }
+
+/* テキストカラー: #333333 */
+body { color: #333333; }
+
+/* 共通ボタン: #333333 */
+button {
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+}

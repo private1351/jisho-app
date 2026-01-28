@@ -1,0 +1,21 @@
+<html lang="ja">
+    <head>
+        {% with title='新規辞書作成ページ' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
+    </head>
+    <body>
+        <div class="dictionary-shelf-container">
+            {% for dictionary in dictionaries %}
+                <a href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}"
+                style="background-color: {{ dictionary.cover_color }};"
+                class="dictionary-shelf-item">
+                    {{ dictionary.title }}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="button-container">
+            <button onclick="window.location.href='/'">TOPへ戻る</button>
+        </div>
+    </body>
+</html>
