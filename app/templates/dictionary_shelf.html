@@ -5,17 +5,189 @@
         {% endwith %}
     </head>
     <body>
-        <div class="dictionary-shelf-container">
-            {% for dictionary in dictionaries %}
-                <a href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}"
-                style="background-color: {{ dictionary.cover_color }};"
-                class="dictionary-shelf-item">
-                    {{ dictionary.title }}
-                </a>
-            {% endfor %}
+        <div class="shelf-page">
+            <div class="dictionary-shelf-container">
+                {% for dictionary in dictionaries %}
+                    <div class="dictionary-shelf-tile" data-dictionary-id="{{ dictionary.id }}">
+                        <a href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}"
+                        style="background-color: {{ dictionary.cover_color }};"
+                        class="dictionary-shelf-item">
+                            {{ dictionary.title }}
+                        </a>
+                        <button
+                            type="button"
+                            class="favorite-toggle {% if dictionary.is_favorite %}is-favorite{% endif %}"
+                            title="お気に入り"
+                            aria-label="お気に入り"
+                            data-favorite="{% if dictionary.is_favorite %}1{% else %}0{% endif %}"
+                        >★</button>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <aside class="shelf-palette" aria-label="表示設定パレット">
+                <div class="palette-section">
+                    <div class="palette-title">お気に入り</div>
+                    <label class="palette-checkbox">
+                        <input type="checkbox" id="fav-only" {% if fav_only %}checked{% endif %}>
+                        お気に入りのみ表示
+                    </label>
+                </div>
+
+                <div class="palette-section">
+                    <div class="palette-title">色</div>
+                    <div class="color-picker shelf-color-picker" id="color-picker" aria-label="色フィルタ（複数選択可）">
+                        {% for c in available_colors %}
+                            <button
+                                type="button"
+                                class="color-dot {% if c in selected_colors %}selected{% endif %}"
+                                style="background-color: {{ c }};"
+                                data-color="{{ c }}"
+                                aria-label="{{ c }}"
+                                title="{{ c }}"
+                            ></button>
+                        {% endfor %}
+                    </div>
+                    <button type="button" id="clear-colors-button" class="shelf-clear-button">全解除</button>
+                </div>
+
+                <div class="palette-section">
+                    <div class="palette-title">並び替え</div>
+                    <div class="palette-radio-group" role="radiogroup" aria-label="並び替え">
+                        <label class="palette-radio">
+                            <input type="radio" name="sort" value="created" {% if sort == 'created' %}checked{% endif %}>
+                            登録日
+                        </label>
+                        <label class="palette-radio">
+                            <input type="radio" name="sort" value="updated" {% if sort == 'updated' %}checked{% endif %}>
+                            更新日
+                        </label>
+                        <label class="palette-radio">
+                            <input type="radio" name="sort" value="color" {% if sort == 'color' %}checked{% endif %}>
+                            色
+                        </label>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="order-toggle"
+                        class="order-toggle"
+                        data-order="{{ order }}"
+                        title="昇順/降順を切り替え"
+                        aria-label="昇順/降順"
+                    >
+                        {% if order == 'desc' %}▽{% else %}△{% endif %}
+                    </button>
+                </div>
+            </aside>
         </div>
         <div class="button-container">
             <button onclick="window.location.href='/'">TOPへ戻る</button>
         </div>
+        <script>
+            (function () {
+                const baseUrl = "{{ url_for('main.dictionary_shelf') }}";
+                const favoriteBaseUrl = "{{ url_for('main.toggle_favorite', dictionary_id=0) }}".replace(/\/0$/, '');
+                const picker = document.getElementById('color-picker');
+                const clearBtn = document.getElementById('clear-colors-button');
+                const orderBtn = document.getElementById('order-toggle');
+                const sortRadios = Array.from(document.querySelectorAll('input[type=\"radio\"][name=\"sort\"]'));
+                const favOnlyCheckbox = document.getElementById('fav-only');
+                if (!picker || !clearBtn || !orderBtn || sortRadios.length === 0 || !favOnlyCheckbox) return;
+
+                function getSelectedColors() {
+                    return Array.from(picker.querySelectorAll('.color-dot.selected'))
+                        .map((btn) => btn.dataset.color)
+                        .filter(Boolean);
+                }
+
+                function getSort() {
+                    const checked = sortRadios.find((r) => r.checked);
+                    return checked ? checked.value : 'created';
+                }
+
+                function getOrder() {
+                    const v = (orderBtn.dataset.order || '').trim();
+                    return (v === 'desc') ? 'desc' : 'asc';
+                }
+
+                function navigateWithParams() {
+                    const params = new URLSearchParams(window.location.search);
+
+                    // sort を更新
+                    params.set('sort', getSort());
+
+                    // order を更新（ボタン状態を反映）
+                    params.set('order', getOrder());
+
+                    // color を更新（複数）
+                    params.delete('color'); // 既存の color を全削除
+                    const colors = getSelectedColors();
+                    colors.forEach((c) => params.append('color', c));
+
+                    // fav（お気に入りのみ）
+                    if (favOnlyCheckbox.checked) params.set('fav', '1');
+                    else params.delete('fav');
+
+                    const qs = params.toString();
+                    window.location.href = baseUrl + (qs ? ('?' + qs) : '');
+                }
+
+                sortRadios.forEach((r) => r.addEventListener('change', navigateWithParams));
+
+                picker.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.color-dot');
+                    if (!btn) return;
+                    btn.classList.toggle('selected'); // 複数選択可
+                    navigateWithParams();
+                });
+
+                clearBtn.addEventListener('click', () => {
+                    picker.querySelectorAll('.color-dot.selected').forEach((b) => b.classList.remove('selected'));
+                    navigateWithParams();
+                });
+
+                orderBtn.addEventListener('click', () => {
+                    const next = (getOrder() === 'asc') ? 'desc' : 'asc';
+                    orderBtn.dataset.order = next;
+                    orderBtn.textContent = (next === 'desc') ? '▽' : '△';
+                    navigateWithParams();
+                });
+
+                favOnlyCheckbox.addEventListener('change', navigateWithParams);
+
+                // ★お気に入りの切替（ページ遷移させずに即反映）
+                document.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.favorite-toggle');
+                    if (!btn) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const tile = btn.closest('.dictionary-shelf-tile');
+                    const dictionaryId = tile?.dataset?.dictionaryId;
+                    if (!dictionaryId) return;
+
+                    try {
+                        const res = await fetch(favoriteBaseUrl + '/' + dictionaryId, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const json = await res.json().catch(() => ({}));
+                        if (!res.ok || !json.success) throw new Error(json.error || '失敗');
+
+                        const isFav = !!json.is_favorite;
+                        btn.dataset.favorite = isFav ? '1' : '0';
+                        btn.classList.toggle('is-favorite', isFav);
+
+                        // お気に入りのみ表示中に解除したら、画面から消す
+                        if (favOnlyCheckbox.checked && !isFav) {
+                            tile?.remove();
+                        }
+                    } catch (_) {
+                        alert('お気に入りの更新に失敗しました。');
+                    }
+                });
+            })();
+        </script>
     </body>
 </html>

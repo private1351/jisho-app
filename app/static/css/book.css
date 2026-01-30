@@ -143,8 +143,8 @@
 
 /* 左ページ */
 .page-left {
-  width: 315px;
-  height: 434px;
+  width: 450px;
+  height: 600px;
   background-color: #F7F6EB;
   padding: 40px;
   box-sizing: border-box;
@@ -165,8 +165,8 @@
 
 /* 右ページ */
 .page-right {
-  width: 315px;
-  height: 434px;
+  width: 450px;
+  height: 600px;
   background-color: #F7F6EB;
   padding: 40px;
   box-sizing: border-box;
@@ -185,6 +185,30 @@
   display: flex;
   align-items: flex-start;
   gap: 0px;
+}
+
+/* 単語行の削除ボタン */
+.word-item-delete-btn {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin-left: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #666;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.word-item-delete-btn:hover {
+  background: #f5f5f5;
+  color: #c00;
+  border-color: #c00;
 }
 
 /* 括弧 */
@@ -234,8 +258,8 @@
   border: none;
   border-bottom: 1px solid transparent;
   background: transparent;
-  font-size: 10px;
-  font-weight: bold;
+  font-size: 13px;
+  font-weight: normal;
   color: #000;
   font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
   resize: none;

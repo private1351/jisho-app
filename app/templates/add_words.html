@@ -16,6 +16,7 @@
                                 <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
                                 <span class="bracket-close">】</span>
                                 <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
+                                <button type="button" class="word-item-delete-btn" title="削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
                             </div>
                         {% endfor %}
                     </div>
@@ -29,6 +30,7 @@
                                 <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
                                 <span class="bracket-close">】</span>
                                 <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
+                                <button type="button" class="word-item-delete-btn" title="この単語を削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
                             </div>
                         {% endfor %}
                     </div>
@@ -52,283 +54,20 @@
             <p>辞書が見つかりませんでした。</p>
         {% endif %}
 
+        {% if dictionary %}
         <script>
-            const SAVE_WORDS_URL = "{{ url_for('main.save_words', dictionary_id=dictionary.id) }}";
-            const DICTIONARY_SHELF_URL = "{{ url_for('main.dictionary_shelf') }}";
-            const CURRENT_PAGE_INDEX = Number("{{ page }}");
-            const BASE_PAGE_URL = "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}";
-            const PREV_PAGE_URL = "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=(page-1 if page>0 else 0)) }}";
-            const NEXT_PAGE_URL = "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=page+1) }}";
-            const MAX_LINES_PER_SIDE = 23;
-
-            function pageUrl(pageIndex) {
-                return BASE_PAGE_URL.replace(/\/0$/, '/' + pageIndex);
-            }
-
-            function adjustWordInputWidth(input) {
-                // 一時的なspan要素を作成して文字幅を測定
-                const span = document.createElement('span');
-                span.style.visibility = 'hidden';
-                span.style.position = 'absolute';
-                span.style.fontSize = window.getComputedStyle(input).fontSize;
-                span.style.fontFamily = window.getComputedStyle(input).fontFamily;
-                span.style.fontWeight = window.getComputedStyle(input).fontWeight;
-                span.textContent = input.value || input.placeholder || '単語';
-                document.body.appendChild(span);
-
-                // 測定した幅に基づいて入力フィールドの幅を調整
-                const width = span.offsetWidth;
-                input.style.width = Math.max(60, Math.min(200, width + 16)) + 'px';
-
-                document.body.removeChild(span);
-            }
-
-            function setupInputListeners(wordItem) {
-                const wordInput = wordItem.querySelector('.word-input');
-                const definitionInput = wordItem.querySelector('.definition-input');
-                const lineCountInput = wordItem.querySelector('.line-count');
-                const wordId = wordItem.getAttribute('data-word-id');
-
-                // 初期幅を調整
-                adjustWordInputWidth(wordInput);
-
-                wordInput.addEventListener('input', () => {
-                    adjustWordInputWidth(wordInput);
-                });
-
-                definitionInput.addEventListener('input', () => {
-                    autoResizeDefinitionTextarea(definitionInput);
-                });
-            }
-
-            // すべての単語項目にイベントリスナーを設定
-            document.querySelectorAll('.word-item').forEach(wordItem => {
-                setupInputListeners(wordItem);
-            });
-
-            // 意味の行数を数える
-            function getVisualLineCount(textarea) {
-                const style = window.getComputedStyle(textarea);
-                const lineHeight = parseFloat(style.lineHeight);
-                return Math.round(textarea.scrollHeight / lineHeight);
-                }
-
-            function autoResizeDefinitionTextarea(textarea) {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-                const lineCount = getVisualLineCount(textarea);
-                textarea.closest('.word-item')
-                        .querySelector('.line-count')
-                        .value = lineCount
-            }
-            document.querySelectorAll('.definition-input').forEach(textarea => {
-            autoResizeDefinitionTextarea(textarea);
-            });
-
-            function createEmptyWordItem() {
-                const wordItem = document.createElement('div');
-                wordItem.className = 'word-item';
-                wordItem.setAttribute('data-word-id', '');
-                wordItem.innerHTML = `
-                    <span class="bracket-open">【</span>
-                    <input type="hidden" class="line-count" value="0">
-                    <input type="text" class="word-input" value="" placeholder="単語" data-word-id="">
-                    <span class="bracket-close">】</span>
-                    <textarea class="definition-input" placeholder="意味" data-word-id="" rows="2"></textarea>
-                `;
-                return wordItem;
-            }
-
-            function calcItemLines(wordItem) {
-                const lineCount = Number(wordItem.querySelector('.line-count')?.value || 0) || 2;
-                return 1 + lineCount;
-            }
-
-            function calcUsedLines(listEl) {
-                if (!listEl) return 0;
-                let used = 0;
-                listEl.querySelectorAll('.word-item').forEach((item) => {
-                    // 空欄でも“1つまで”は許可するが、容量計算には含める
-                    used += calcItemLines(item);
-                });
-                return used;
-            }
-
-            function isBlankNewRow(wordItem) {
-                const wordIdRaw = wordItem.getAttribute('data-word-id');
-                const isNew = !wordIdRaw;
-                if (!isNew) return false;
-
-                const wordText = (wordItem.querySelector('.word-input')?.value || '').trim();
-                const definitionText = (wordItem.querySelector('.definition-input')?.value || '').trim();
-                return wordText === '' && definitionText === '';
-            }
-
-            function findBlankNewRows() {
-                return Array.from(document.querySelectorAll('.word-item')).filter(isBlankNewRow);
-            }
-
-            function ensureSingleBlankNewRow() {
-                const blanks = findBlankNewRows();
-                if (blanks.length <= 1) return;
-
-                // 先頭の1つだけ残して、それ以外は削除
-                blanks.slice(1).forEach((item) => item.remove());
-            }
-
-            function chooseTargetListForNewRow() {
-                const left = document.getElementById('left-words-list');
-                const right = document.getElementById('right-words-list');
-                if (!right) return left;
-
-                const leftCount = left?.querySelectorAll('.word-item').length || 0;
-                const rightCount = right?.querySelectorAll('.word-item').length || 0;
-                return (leftCount <= rightCount) ? left : right;
-            }
-
-            function addNewRow() {
-                // すでに空欄（新規の未入力行）があるなら、それを使う
-                const blanks = findBlankNewRows();
-                if (blanks.length >= 1) {
-                    ensureSingleBlankNewRow();
-                    const input = blanks[0].querySelector('.word-input') || blanks[0].querySelector('.definition-input');
-                    input?.focus();
-                    return;
-                }
-
-                const leftList = document.getElementById('left-words-list');
-                const rightList = document.getElementById('right-words-list');
-
-                // まず左が埋まるまで左へ、次に右へ。両方埋まったら次ページへ。
-                const newRowLines = 1 + 2; // 単語1行 + 意味2行（初期）
-                const leftUsed = calcUsedLines(leftList);
-                const rightUsed = calcUsedLines(rightList);
-
-                let targetList = null;
-                if (leftUsed + newRowLines <= MAX_LINES_PER_SIDE) {
-                    targetList = leftList;
-                } else if (rightUsed + newRowLines <= MAX_LINES_PER_SIDE) {
-                    targetList = rightList;
-                } else {
-                    // 次ページに遷移し、遷移先で自動的に空の行を追加する
-                    window.location.href = pageUrl(CURRENT_PAGE_INDEX + 1) + '?add=true';
-                    return;
-                }
-
-                const wordItem = createEmptyWordItem();
-                targetList.appendChild(wordItem);
-                setupInputListeners(wordItem);
-
-                const textarea = wordItem.querySelector('.definition-input');
-                if (textarea) autoResizeDefinitionTextarea(textarea);
-
-                const input = wordItem.querySelector('.word-input');
-                if (input) input.focus();
-
-                ensureSingleBlankNewRow();
-            }
-
-            function collectWordsForSave() {
-                const words = [];
-                document.querySelectorAll('.word-item').forEach((wordItem) => {
-                    const wordIdRaw = wordItem.getAttribute('data-word-id');
-                    const wordId = wordIdRaw ? Number(wordIdRaw) : null;
-                    const wordInput = wordItem.querySelector('.word-input');
-                    const definitionInput = wordItem.querySelector('.definition-input');
-                    const lineCountInput = wordItem.querySelector('.line-count');
-
-                    const wordText = (wordInput?.value || '').trim();
-                    const definitionText = (definitionInput?.value || '').trim();
-                    const lineCount = Number(lineCountInput?.value || 0) || 2;
-
-                    // 既存行は空でも保存対象（ユーザーが消した場合を反映できる）
-                    // 新規行は単語が空ならスキップ（DBに空行を作らない）
-                    if (!wordId && !wordText) return;
-
-                    words.push({
-                        id: wordId,
-                        word: wordText,
-                        definition: definitionText,
-                        line_count: lineCount
-                    });
-                });
-                return words;
-            }
-
-            async function saveAllWords({ exitAfterSave }) {
-                const saveBtn = document.getElementById('save-button');
-                const saveExitBtn = document.getElementById('save-exit-button');
-
-                saveBtn.disabled = true;
-                saveExitBtn.disabled = true;
-
-                try {
-                    const payload = {
-                        page_index: CURRENT_PAGE_INDEX,
-                        words: collectWordsForSave()
-                    };
-
-                    const res = await fetch(SAVE_WORDS_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    const json = await res.json().catch(() => ({}));
-                    if (!res.ok || !json.success) {
-                        throw new Error(json.error || '保存に失敗しました。');
-                    }
-
-                    if (exitAfterSave) {
-                        window.location.href = DICTIONARY_SHELF_URL;
-                    } else {
-                        const nextPage = Number(json.page_index);
-                        if (Number.isFinite(nextPage) && nextPage >= 0 && nextPage !== CURRENT_PAGE_INDEX) {
-                            window.location.href = pageUrl(nextPage);
-                        } else {
-                            window.location.reload();
-                        }
-                    }
-                } catch (e) {
-                    alert(e?.message || '保存に失敗しました。');
-                } finally {
-                    saveBtn.disabled = false;
-                    saveExitBtn.disabled = false;
-                }
-            }
-
-            document.getElementById('save-button')?.addEventListener('click', () => {
-                saveAllWords({ exitAfterSave: false });
-            });
-
-            document.getElementById('save-exit-button')?.addEventListener('click', () => {
-                saveAllWords({ exitAfterSave: true });
-            });
-
-            document.getElementById('add-row-button')?.addEventListener('click', () => {
-                addNewRow();
-            });
-
-            document.getElementById('prev-page-button')?.addEventListener('click', () => {
-                window.location.href = PREV_PAGE_URL;
-            });
-
-            document.getElementById('next-page-button')?.addEventListener('click', () => {
-                window.location.href = NEXT_PAGE_URL;
-            });
-
-            // 初期表示時にも空欄は1つだけに整える
-            ensureSingleBlankNewRow();
-
-            // URLパラメータ ?add=true がある場合、自動的に空の行を追加
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('add') === 'true') {
-                // URLからパラメータを削除（ブラウザ履歴をクリーンに保つ）
-                const newUrl = window.location.pathname;
-                window.history.replaceState({}, '', newUrl);
-                // 空の行を追加
-                addNewRow();
-            }
+            window.ADD_WORDS_CONFIG = {
+                saveWordsUrl: "{{ url_for('main.save_words', dictionary_id=dictionary.id) }}",
+                deleteWordBaseUrl: "{{ url_for('main.delete_word', dictionary_id=dictionary.id, word_id=0) }}".replace(/\/0$/, ''),
+                dictionaryShelfUrl: "{{ url_for('main.dictionary_shelf') }}",
+                currentPageIndex: {{ page }},
+                basePageUrl: "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}",
+                prevPageUrl: "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=(page-1 if page>0 else 0)) }}",
+                nextPageUrl: "{{ url_for('main.add_words', dictionary_id=dictionary.id, page=page+1) }}",
+                maxLinesPerSide: 23
+            };
         </script>
+        <script src="{{ url_for('static', filename='js/add_words.js') }}"></script>
+        {% endif %}
     </body>
 </html>

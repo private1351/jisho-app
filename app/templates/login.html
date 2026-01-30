@@ -1,0 +1,21 @@
+<html>
+    <head>{% include 'head_css.html' %}</head>
+    <body>
+        <h2>Login</h2>
+        <form method="POST" action="./login">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label }}<br>
+                {{ form.username(size=32) }}<br>
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}<br>
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+        </form>
+        <p>新規登録はこちら<a href="./register">Click to Register!</a></p>
+    </body>
+</html>
