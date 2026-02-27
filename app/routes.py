@@ -1,9 +1,14 @@
+import random
+import difflib
+from typing import List, Set, Dict
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db
 from .models import Dictionary, Word, User
 from .form import LoginForm, RegistrationForm
 from . import login_manager
+from nltk.corpus import wordnet as wn
+from wordfreq import top_n_list
 
 main = Blueprint('main', __name__)
 
@@ -66,6 +71,12 @@ def register():
         return redirect(url_for('main.login'))
     return render_template('register.html', form=form)
 
+@main.route('/logout')
+def logout():
+    logout_user()
+    flash('ログアウトしました')
+    return redirect(url_for('main.login'))
+
 @main.route('/')
 def index():
     if not current_user.is_authenticated:
@@ -96,6 +107,36 @@ def create_dictionary():
         return redirect(url_for('main.add_words', dictionary_id=new_dictionary.id, page=0))
 
     return render_template('create_dictionary.html', cover_colors=cover_colors)
+
+#; 辞書の編集
+@main.route('/update-dictionary/<int:dictionary_id>', methods=['GET', 'POST'])
+def update_dictionary(dictionary_id):
+    cover_colors = ['#773333', '#334477', '#335544', '#333333', '#C56700']
+    dictionary = Dictionary.query.get_or_404(dictionary_id)
+    original_title = dictionary.title
+    original_color = dictionary.cover_color
+    if request.method == 'POST':
+        new_title = request.form.get('cover-title', '').strip()
+        new_color = request.form.get('cover-color', '')
+        # バリデーション
+        if not new_title:
+            return render_template('dictionary_detail.html',
+                                    cover_colors=cover_colors,
+                                    error='辞書名を入力してください')
+        if original_title != new_title or original_color != new_color:
+            dictionary.title = new_title
+            dictionary.cover_color = new_color
+            db.session.commit()
+            return redirect(url_for('dictionary_detail', dictionary_id=dictionary.id))
+    return render_template('dictionary_detail.html', dictionary=dictionary, cover_colors=cover_colors)
+
+#; 辞書の削除
+@main.route('/delete-dictionary/<int:dictionary_id>', methods=['POST'])
+def delete_dictionary(dictionary_id):
+    dictionary = Dictionary.query.get_or_404(dictionary_id)
+    db.session.delete(dictionary)
+    db.session.commit()
+    return redirect(url_for('main.dictionary_shelf'))
 
 # 単語登録ページ
 @main.route('/add-words/<int:dictionary_id>/<int:page>')
@@ -266,13 +307,11 @@ def dictionary_shelf():
 
     q = Dictionary.query
     if selected_colors:
-        # NOTE: 型チェッカーが SQLAlchemy の属性を str 扱いするため、ここは抑制する
         q = q.filter(Dictionary.__table__.c.cover_color.in_(selected_colors))  # pyright: ignore
     if fav_only:
         q = q.filter_by(is_favorite=True)
 
     if sort == 'color':
-        # cover_color は '#RRGGBB' を想定。文字列順になるが色のグルーピング用途には十分。
         if order == 'desc':
             dictionaries = q.order_by(Dictionary.__table__.c.cover_color.desc(), Dictionary.id.desc()).all()  # pyright: ignore
         else:
@@ -299,6 +338,83 @@ def dictionary_shelf():
         fav_only=fav_only,
         available_colors=available_colors,
     )
+
+# クイズメインページ
+@main.route('/quiz-menu')
+def quiz_menu():
+    dictionaries = Dictionary.query.all()
+    return render_template('quiz_menu.html', dictionaries=dictionaries)
+
+# クイズプレイページ
+# 一旦クイズ形式を数字で判別するようにしている
+# 1: 択一
+# 2: 記述
+# とりあえず記述部分のみ実装
+@main.route('/quiz-play/<dict_id>/<int:quiz_type>')
+def quiz_play(dict_id, quiz_type):
+    words = Word.query.filter(Word.dictionary_id == dict_id).all()
+    dict = Dictionary.query.filter(Dictionary.id == dict_id).first()
+    dict_name = dict.title if dict else ""
+    if quiz_type == 1:
+        return render_template('quiz_play_choice.html', words=words, quiz_type=quiz_type)
+    elif quiz_type == 2:
+        return render_template('quiz_play_description.html', dict_id=dict_id, quiz_type=quiz_type, dict_name=dict_name)
+    else:
+        return redirect(url_for('main.quiz_menu'))
+
+def generate_incorrect_choices(words: List[Word]) -> Dict[int, List[str]]:
+    """
+    各単語に対して、択一クイズ用のハズレ選択肢（他単語の定義）を3つずつ割り当てる。
+    word_id -> [定義1, 定義2, 定義3]
+    """
+    result: Dict[int, List[str]] = {}
+    definitions = [w.definition or "" for w in words]
+    for w in words:
+        others = [d for d in definitions if d != (w.definition or "")]
+        if len(others) >= 3:
+            result[w.id] = random.sample(others, 3)
+        elif others:
+            result[w.id] = (random.sample(others, len(others)) + others * 2)[:3]
+        else:
+            result[w.id] = ["(選択肢)", "(選択肢)", "(選択肢)"]
+    return result
+
+@main.route('/get-words', methods=['POST'])
+def get_all_words():
+    data = request.get_json()
+    dict_id = data.get("dict_id")
+    words = Word.query.filter(Word.dictionary_id == dict_id).all()
+    word_list = [word.to_dict() for word in words]
+    return jsonify(word_list)
+
+# WordNetの類似単語取得
+def get_wordnet_similar_words(word: str) -> List[str]:
+    similar_words: List[str] = []
+    for syn in wn.synsets(word):
+        if syn is None:
+            continue
+        # 同義語
+        for lemma in (syn.lemmas() or []):
+            w = lemma.name().replace("_", " ")
+            if w.lower() != word.lower():
+                similar_words.append(w)
+        # 同カテゴリ(上位概念)
+        for hypernym in (syn.hypernyms() or []):
+            for lemma in (hypernym.lemmas() or []):
+                similar_words.append(lemma.name().replace("_", " "))
+        # 同カテゴリ(下位概念)
+        for hyponym in (syn.hyponyms() or []):
+            for lemma in (hyponym.lemmas() or []):
+                similar_words.append(lemma.name().replace("_", " "))
+    return similar_words
+
+# スペルが似ている単語取得
+def get_spelling_similar_words(word: str) -> List[str]:
+    # 英語の単語を50000件取得
+    vocab = top_n_list('en', 50000)
+    # n: 最大候補数, cutoff: 類似度の閾値
+    matches = difflib.get_close_matches(word, vocab, n=10, cutoff=0.75)
+    return matches
 
 #; DB全削除(開発用)
 @main.route('/delete-db')

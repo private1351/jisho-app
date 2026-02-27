@@ -1,0 +1,351 @@
+.quiz-menu-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    border: 6px solid #333333;
+    border-radius: 10px;
+    background-color: #fffef7;
+    align-self: start;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    display: flex;
+    margin-right: 40px;
+}
+
+.howto-container {
+    width: 80%;
+}
+
+.box {
+    background: #fffef7;
+    border: 6px solid #000;
+    border-radius: 18px;
+    box-shadow: 14px 14px 0 #000;
+}
+.quiz-header {
+    background-color: #6EB487;
+}
+
+.quiz-header > a {
+    color: #fff;
+}
+
+/* ヘッダーのメニュー */
+.menu-alt .menu-item a {
+    color: #fff;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000,
+                -1px 1px 0 #000,  1px -1px 0 #000,
+                1px 0 0 #000, -1px  0 0 #000,
+                0 1px 0 #000,  0 -1px 0 #000;
+}
+
+.menu-alt .menu-item:not(:last-child)::after {
+    color: #666;
+}
+
+.quiz-body {
+    background-color: #6EB487;
+    font-family: "Zen Maru Gothic", sans-serif;
+    color: #333;
+    font-size: 23px;
+    font-weight: bold;
+    min-height: 100vh;
+}
+
+.menu-title-img {
+    height: 60px;
+    align-self: end;
+    justify-self: start;
+}
+
+.quiz-menu-grid {
+    display: grid;
+    grid-template-rows: 80px 500px;
+    grid-template-columns: 900px 600px;
+    margin-top: 60px;
+    justify-content: center;
+}
+
+input[type="radio"] {
+    accent-color: #0072C2;
+    transform: scale(2.5);
+    vertical-align: middle;
+}
+
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 25px;
+}
+
+.howto {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.howto-step {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.howto-icon {
+    width: 44px;
+    height: 44px;
+    background: #FFD54F;
+    border: 4px solid #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 4px 4px 0 #000;
+    font-size: 20px;
+}
+
+.howto-text {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.quiz-menu-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.play-btn {
+    display: flex;
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    width: 130px;
+    padding: 10px;
+    background: #0072C2;
+    color: #fff;
+    border: 6px solid #000;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0 #000;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    appearance: none;
+}
+
+.play-btn:hover {
+    transform: translateY(6px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+.play-btn:active {
+    transform: translateY(6px);
+    box-shadow: 4px 4px 0 #000;
+}
+
+.retry-btn {
+    background-color: #FFD54F;
+    color: #000;
+}
+
+/* 記述クイズ用 */
+.main-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+    flex-direction: column;
+}
+
+.quiz-description-grid {
+    display: grid;
+    grid-template-columns: 700px 400px;
+    margin-top: 60px;
+    justify-content: center;
+    column-gap: 40px;
+    align-items: stretch;
+}
+
+.quiz-description-grid > * {
+    height: 100%;
+}
+
+.descriptive-quiz {
+    max-width: 90%;
+    height: 80%;
+    padding: 40px;
+    background: #fffef7;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    margin-bottom: 16px;
+    padding-bottom: 6px;
+}
+
+.question-text {
+    font-size: 26px;
+    line-height: 1.0;
+    min-height: 100px;
+}
+
+.answer-area {
+    margin-top: 40px;
+}
+
+.answer-sheet {
+    padding: 30px 6px 8px;
+}
+
+.answer-input {
+    width: 100%;
+    font-size: 30px;
+    border: none;
+    border-bottom: 5px solid #0072C2;
+    background: transparent;
+    outline: none;
+    padding: 6px 4px;
+}
+
+.quiz-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.submit-btn {
+    font-size: 20px;
+    padding: 10px 40px;
+    border: 3px solid #000;
+    background: #0072C2;
+    color: #fff;
+    border-radius: 14px;
+    cursor: pointer;
+    font-family: "Zen Maru Gothic", sans-serif;
+}
+
+/* 進捗 */
+.result-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    padding: 40px;
+    height: 80%;
+    justify-content: space-between;
+}
+
+.progress {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    border: 3px solid #000;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #0072C2;
+}
+
+/* 正誤判定 */
+.judge {
+    font-size: 30px;
+    font-weight: bold;
+    min-height: 60px;
+    padding-top: 60px;
+    padding-bottom: 20px;
+}
+
+.judge.correct {
+    color: #2e7d32;
+}
+
+.judge.wrong {
+    color: #d32f2f;
+}
+
+.answer-text {
+    font-size: 26px;
+    text-align: center;
+    min-height: 40px;
+}
+
+/* クイズ情報用タグ */
+.quiz-tags {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+    margin-bottom: -30px;
+}
+
+.tag {
+    position: relative;
+    padding: 14px 26px 14px 50px;
+    font-size: 22px;
+    font-weight: bold;
+    border: 4px solid #000;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 6px 6px 0 #000;
+}
+
+/* 穴 */
+.tag::after {
+    content: "";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border: 3px solid #000;
+    border-radius: 50%;
+    background: #fffef7;
+}
+
+.tag.dict {
+    background: #FFD54F;
+}
+
+.tag.type {
+    background: #81D4FA;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn 0.45s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,21 +1,27 @@
 <html>
     <head>{% include 'head_css.html' %}</head>
     <body>
-        <h2>Login</h2>
-        <form method="POST" action="./login">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }}<br>
-                {{ form.username(size=32) }}<br>
-            </p>
-            <p>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
-            </p>
-            <p>
-                {{ form.submit() }}
-            </p>
-        </form>
-        <p>新規登録はこちら<a href="./register">Click to Register!</a></p>
+        <div class="login-container">
+            <img src="{{ url_for('static', filename='image/jisho2logo.png') }}" alt="タイトルロゴ" class="login-image">
+            <div class="login-form" style="background-color: #ffffff;">
+            <form method="POST" action="./login">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username(size=32, class="textbox-1", placeholder="ユーザー名", autocomplete="off") }}<br>
+                </p>
+                <p>
+                    {{ form.password(size=32, class="textbox-1", placeholder="パスワード", autocomplete="off") }}<br>
+                </p>
+                <p>
+                    <a class="right-link" href="./forgot-password">パスワードをお忘れですか?</a>
+                </p>
+                <p>
+                    {{ form.submit(class="login-button") }}
+                </p>
+                </form>
+            </div>
+            <div class="divider">または</div>
+            <a href="./register">新規登録はこちら</a>
+        </div>
     </body>
 </html>

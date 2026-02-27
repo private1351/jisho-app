@@ -1,21 +1,27 @@
+.shelf-layout {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+}
+
+.shelf-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
+}
+
 .dictionary-shelf-container {
     display: grid;
-    width: 540px;
-    height: 434px;
-    position: relative;
-    left: 50%;
-    top: 40px;
-    transform: translateX(-50%);
-    /* タイルは全て同じサイズ（だいたい3:4）で固定 */
-    --tile-w: 120px;
-    --tile-h: 160px; /* 120 * (4/3) */
 
-    grid-template-columns: repeat(3, var(--tile-w));
+    --tile-w: 120px;
+    --tile-h: 160px;
+
+    grid-template-columns: repeat(5, var(--tile-w));
     grid-auto-rows: var(--tile-h);
-    gap: 10px;
-    row-gap: 10px;
-    padding: 20px 20px;
-    box-sizing: border-box;
+    gap: 16px;
+
+    padding: 20px;
 }
 
 .dictionary-shelf-tile {
@@ -29,6 +35,24 @@
     width: 100%;
     height: 100%;
     margin: 0;
+}
+
+/* 本カード */
+.dictionary-book {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    cursor: pointer;
+}
+
+/* hoverで浮く */
+.dictionary-book:hover {
+    transform: translateY(-10px) scale(1.04);
+    box-shadow: 0 14px 0 #F7F6EB;
+}
+
+/* 押したとき */
+.dictionary-book:active {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 6px 0 #F7F6EB;
 }
 
 .favorite-toggle {
@@ -74,14 +98,10 @@
    右側パレット（フィルタ・ソート）
 ----------------------------- */
 
-.shelf-page {
-    position: relative;
-}
-
 .shelf-palette {
     position: fixed;
-    right: 24px;
-    top: 72px;
+    right: 200px;
+    top: 200px;
     width: 250px;
     padding: 12px;
     background: #ffffff;
@@ -144,14 +164,14 @@
     padding: 6px 8px;
     border-radius: 8px;
     border: 1px solid #cccccc;
-    background: #ffffff;
+    background: #333333;
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
 }
 
 .order-toggle:hover {
-    background: #f5f5f5;
+    background: #555555;
 }
 
 /* 画面が狭い場合はパレットを下に回す */

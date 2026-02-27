@@ -1,0 +1,55 @@
+<html lang="ja">
+    <head>
+        {% with title='辞書詳細ページ' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
+    </head>
+    {% include 'main_header.html' %}
+    <body>
+        <p>編集モード</p>
+        <label class="toggle-button-1">
+            <input type="checkbox"/>
+        </label>
+        <form action="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}" method="post">
+            <div class="cover-container">
+                <div class="book-cover" id="cover">
+                    <input type="hidden" id="cover-color" name="cover-color" value="{{ dictionary.cover_color }}">
+                    <textarea
+                        class="cover-title"
+                        id="cover-title"
+                        name="cover-title"
+                        placeholder="辞書名"
+                        autocomplete="off"
+                        autofocus required rows="2"
+                        maxlength="18"
+                        >{{ dictionary.title }}</textarea>
+                </div>
+                <div class="notice-section">
+                    <h2>【編集】</h2>
+                    <ul>
+                        <li>このページでは、辞書の編集を行います。</li>
+                        <li>辞書名は18文字以内で入力してください。</li>
+                        <li>表紙の色は下部から選択してください。</li>
+                        <li>確定ボタン押下で変更が保存されます。</li>
+                        <li>削除ボタン押下で辞書を削除します。</li>
+                        <li>開くボタン押下で単語の編集へ進みます。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="color-picker" id="colorPicker">
+                {% for color in cover_colors %}
+                    <div class="color-dot" data-color="{{ color }}"></div>
+                {% endfor %}
+            </div>
+            <button type="submit">確定</button>
+        </form>
+        <a href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}">開く</a>
+        <form
+            action="{{ url_for('main.delete_dictionary', dictionary_id=dictionary.id) }}"
+            method="post"
+            onsubmit="return confirm('この辞書を削除しますか？');">
+            <button type="submit">削除</button>
+        </form>
+        <script src="{{ url_for('static', filename='js/edit_dictionary.js') }}"></script>
+    </body>
+</html>

@@ -1,7 +1,7 @@
-from email.policy import default
-from token import OP
 from datetime import datetime
 from typing import Optional
+
+from sqlalchemy.orm import relationship
 from . import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -30,7 +30,8 @@ class Word(db.Model):
     definition = db.Column(db.String(100))
     line_count = db.Column(db.Integer)
     page_index = db.Column(db.Integer)
-    dictionary_id = db.Column(db.Integer, db.ForeignKey("dictionaries.id"))
+    dictionary_id = db.Column(db.Integer, db.ForeignKey("dictionaries.id", ondelete="CASCADE"), nullable=False)
+    distractors =  db.relationship("Distractor", back_populates="word", cascade="all, delete-orphan")
 
     # 初期化メソッド
     def __init__(self, word: Optional[str] = None, definition: Optional[str] = None, line_count: Optional[int] = 2, page_index: Optional[int] = None, dictionary_id: Optional[int] = None):
@@ -45,6 +46,21 @@ class Word(db.Model):
             self.page_index = page_index
         if dictionary_id is not None:
             self.dictionary_id = dictionary_id
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "word": self.word,
+            "definition": self.definition,
+            "dictionary_id": self.dictionary_id
+        }
+
+class Distractor(db.Model):
+    __tablename__ = "distractors"
+    id = db.Column(db.Integer, primary_key=True)
+    distractor = db.Column(db.String(100), nullable=False)
+    word_id = db.Column(db.Integer, db.ForeignKey("words.id", ondelete="CASCADE"), nullable=False)
+    word = relationship("Word", back_populates="distractors")
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"

@@ -1,0 +1,67 @@
+<html>
+    <head>
+        {% include 'head_css.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+
+    </head>
+    <body class="quiz-body">
+        {% include 'quiz_header.html' %}
+        <div class="quiz-menu-grid">
+            <!-- 1列1行目 Choose -->
+            <img src="{{ url_for('static', filename='image/Choose.png') }}" class="menu-title-img">
+            <!-- 2列1行目 How To-->
+            <img src="{{ url_for('static', filename='image/HowTo.png') }}" class="menu-title-img">
+            <!-- 1列2行目 問題選択ボックス -->
+            <div class="quiz-menu-container box">
+                <p>出題範囲</p>
+                <div class="radio-group">
+                    {% for dictionary in dictionaries %}
+                        <input type="radio" id="dictionary-{{ dictionary.id }}" name="source-dictionary" {% if loop.first %}checked{% endif %}>
+                        <label for="dictionary-{{ dictionary.id }}">
+                            {{ dictionary.title }}
+                        </label>
+                    {% endfor %}
+                </div>
+                <p>出題形式</p>
+                <div class="radio-group">
+                    <input type="radio" name="quiz-type" id="quiz-type-choice" value="1" checked>
+                    <label for="quiz-type-choice">択一</label>
+                    <input type="radio" name="quiz-type" id="quiz-type-description" value="2">
+                    <label for="quiz-type-description">記述</label>
+                </div>
+            </div>
+
+            <!-- 2列2行目 使い方説明ボックス -->
+            <div class="quiz-menu-container box">
+                <div class="howto">
+                    <div class="howto-step">
+                        <div class="howto-icon">1</div>
+                        <div class="howto-text">出題する辞書を1つ選択</div>
+                    </div>
+                    <div class="howto-step">
+                        <div class="howto-icon">2</div>
+                        <div class="howto-text">出題形式（択一／記述）を選択</div>
+                    </div>
+                    <div class="howto-step">
+                        <div class="howto-icon">3</div>
+                        <div class="howto-text">PLAYボタンでクイズ開始！</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="quiz-menu-actions">
+            <button type="button" id="quiz-play-btn" class="play-btn">PLAY</button>
+        </div>
+        <script>
+            document.getElementById('quiz-play-btn').onclick = function() {
+                var ids = [];
+                {% for d in dictionaries %}
+                if (document.getElementById('dictionary-{{ d.id }}').checked) ids.push({{ d.id }});
+                {% endfor %}
+                var quizType = document.querySelector('input[name="quiz-type"]:checked').value;
+                if (ids.length === 0) { alert('出題範囲を1つ以上選んでください'); return; }
+                window.location.href = '/quiz-play/' + ids.join(',') + '/' + quizType;
+            };
+        </script>
+    </body>
+</html>

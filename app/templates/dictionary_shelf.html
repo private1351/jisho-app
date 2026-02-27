@@ -1,31 +1,41 @@
 <html lang="ja">
     <head>
-        {% with title='新規辞書作成ページ' %}
+        {% with title='辞書一覧ページ' %}
             {% include 'head_css.html' %}
         {% endwith %}
     </head>
+    {% include 'main_header.html' %}
     <body>
-        <div class="shelf-page">
-            <div class="dictionary-shelf-container">
-                {% for dictionary in dictionaries %}
-                    <div class="dictionary-shelf-tile" data-dictionary-id="{{ dictionary.id }}">
-                        <a href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}"
-                        style="background-color: {{ dictionary.cover_color }};"
-                        class="dictionary-shelf-item">
-                            {{ dictionary.title }}
-                        </a>
-                        <button
-                            type="button"
-                            class="favorite-toggle {% if dictionary.is_favorite %}is-favorite{% endif %}"
-                            title="お気に入り"
-                            aria-label="お気に入り"
-                            data-favorite="{% if dictionary.is_favorite %}1{% else %}0{% endif %}"
-                        >★</button>
-                    </div>
-                {% endfor %}
+        <div id="shelf-config"
+            data-base-url="{{ url_for('main.dictionary_shelf') }}"
+            data-favorite-base-url="{{ url_for('main.toggle_favorite', dictionary_id=0) }}">
+        </div>
+        <div class="shelf-layout">
+            <!-- 左側 一覧-->
+            <div class="shelf-center">
+                <div class="dictionary-shelf-container">
+                    {% for dictionary in dictionaries %}
+                        <div class="dictionary-shelf-tile" data-dictionary-id="{{ dictionary.id }}">
+                            <div class="dictionary-book">
+                            <a href="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}"
+                                style="background-color: {{ dictionary.cover_color }};"
+                                class="dictionary-shelf-item">
+                                {{ dictionary.title }}
+                            </a>
+                            <button
+                                type="button"
+                                class="favorite-toggle {% if dictionary.is_favorite %}is-favorite{% endif %}"
+                                title="お気に入り"
+                                aria-label="お気に入り"
+                                data-favorite="{% if dictionary.is_favorite %}1{% else %}0{% endif %}"
+                            >★</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-
-            <aside class="shelf-palette" aria-label="表示設定パレット">
+            <!-- 右側 検索用パレット -->
+            <div class="shelf-palette" aria-label="表示設定パレット">
                 <div class="palette-section">
                     <div class="palette-title">お気に入り</div>
                     <label class="palette-checkbox">
@@ -79,10 +89,7 @@
                         {% if order == 'desc' %}▽{% else %}△{% endif %}
                     </button>
                 </div>
-            </aside>
-        </div>
-        <div class="button-container">
-            <button onclick="window.location.href='/'">TOPへ戻る</button>
+            </div>
         </div>
         <script>
             (function () {

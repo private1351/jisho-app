@@ -3,18 +3,27 @@
         {% include 'head_css.html' %}
     </head>
     <body>
-        <h2>Register</h2>
-        <form method="POST" action="./register">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.username.label }}<br>
-                {{ form.username(size=32) }}<br>
-                {{ form.password.label }}<br>
-                {{ form.password(size=32) }}<br>
-                {{ form.password2.label }}<br>
-                {{ form.password2(size=32) }}<br>
-                {{ form.submit() }}
-            </p>
-        </form>
-    </body>
-</html>
+        <div class="register-container">
+            <img src="{{ url_for('static', filename='image/jisho2logo.png') }}" alt="タイトルロゴ" class="register-image">
+            <div class="register-form" style="background-color: #ffffff;">
+                <form method="POST" action="./register">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username(size=32, class="textbox-1", placeholder="ユーザー名", autocomplete="off") }}<br>
+                    </p>
+                    <p>
+                        {{ form.password(size=32, class="textbox-1", placeholder="パスワード", autocomplete="off") }}<br>
+                    </p>
+                    <p>
+                        {{ form.password2(size=32, class="textbox-1", placeholder="パスワード確認", autocomplete="off") }}<br>
+                    </p>
+                    <p>
+                        {{ form.submit(class="register-button") }}
+                    </p>
+                    </form>
+                </div>
+                <div class="divider">または</div>
+                <a href="./login">ログインはこちら</a>
+            </div>
+        </body>
+    </html>

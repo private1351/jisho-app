@@ -3,8 +3,28 @@
         {% include 'head_css.html' %}
     </head>
     <body>
-        <a href="/create-dictionary">新規作成</a>
-        <a href="/dictionary-shelf">一覧</a>
-        <a href="/delete-db">DB削除</a>
+        <div class="menu-button-container">
+            <img src="{{ url_for('static', filename='image/title.png') }}" alt="タイトル画像" class="title-image">
+            <a class="icon-menu-button" href="/create-dictionary">
+                <i class="fa-solid fa-plus"></i>
+                <span class="label">新規作成</span>
+            </a>
+            <a class="icon-menu-button" href="/dictionary-shelf">
+                <i class="fa-solid fa-list"></i>
+                <span class="label">一覧</span>
+            </a>
+            <a class="icon-menu-button" href="/quiz-menu">
+                <i class="fa-solid fa-question"></i>
+                <span class="label">クイズ</span>
+            </a>
+            <a class="icon-menu-button" href="/delete-db">
+            <i class="fa-solid fa-trash"></i>
+                <span class="label">DB削除</span>
+            </a>
+            <a class="icon-menu-button" href="/logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="label">ログアウト</span>
+            </a>
+        </div>
     </body>
 </html>

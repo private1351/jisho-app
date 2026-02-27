@@ -345,3 +345,106 @@
 .save-exit-container button:hover {
   background-color: #555;
 }
+
+/* ログイン・新規登録フォーム */
+.login-container, .register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form, .register-form {
+  display: flex;
+  width: 315px;
+  height: auto;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-button, .register-button {
+  width: 100%;
+  padding: 12px 32px;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  cursor: pointer;
+}
+
+.login-button:hover, .register-button:hover {
+  background-color: #555;
+}
+
+/*右寄せのリンク*/
+.right-link {
+  font-size: 10px;
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  text-align: right;
+  margin-top: 10px;
+}
+
+.login-image, .register-image {
+  width: 260px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* または */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 16px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+
+.toggle-button-1 {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: #dddddd;
+    cursor: pointer;
+    transition: background-color .4s;
+}
+
+.toggle-button-1:has(:checked) {
+    background-color: #2e2e2e;
+}
+
+.toggle-button-1::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgb(0 0 0 / 20%);
+    background-color: #fff;
+    content: '';
+    transition: left .4s;
+}
+
+.toggle-button-1:has(:checked)::after {
+    left: 50px;
+}
+
+.toggle-button-1 input {
+    display: none;
+}

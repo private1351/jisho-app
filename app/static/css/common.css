@@ -38,3 +38,128 @@ button {
   align-items: center;
   margin: 20px auto;
 }
+
+.textbox-1 {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #969da3;
+  margin: 0 auto;
+  border-radius: 3px;
+  color: #333;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.textbox-1::placeholder {
+  color: #999;
+}
+
+/* メニューボタン */
+.menu-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 20px auto;
+}
+
+.icon-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px auto;
+  width: 180px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #333333;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.icon-menu-button:hover {
+  background: #555555;
+}
+
+/* アイコンと文字の間に縦線を入れる */
+.icon-menu-button .label {
+  padding-left: 12px;
+  border-left: 1px solid #ccc;
+}
+
+.title-image {
+  width: 350px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ヘッダー全体 */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 80px;
+  z-index: 1000; /* 最前面に表示 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 影で浮かせる*/
+}
+
+/* ホームを左固定 */
+header > a {
+  text-decoration: none;
+  font-size: 30px;
+  padding-left: 30px;
+}
+
+/* navを右に寄せる */
+.nav {
+  display: flex;
+  padding-right: 40px;
+}
+
+.main-header {
+  background-color: #333;
+  color: #fff;
+}
+
+.main-header > a {
+  color: #fff;
+}
+
+
+/* ===== 共通レイアウト ===== */
+.menu-list {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-item {
+  list-style: none;
+}
+
+.menu-item a {
+  text-decoration: none;
+  font-size: 25px;
+}
+
+/* ／ を自動で入れる */
+.menu-item:not(:last-child)::after {
+  content: " ／ ";
+  margin-left: 10px;
+}
+
+/* ===== ヘッダー用（白文字） ===== */
+.menu-header .menu-item a {
+  color: #fff;
+}
+
+.menu-header .menu-item:not(:last-child)::after {
+  color: #aaa;
+}
+
