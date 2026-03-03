@@ -4,13 +4,14 @@ let canGoNext = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('answerInput');
-    const showBtn = document.getElementById('show-answer');
+    const showBtn = document.getElementById('showAnswerBtn');
+    const hideBtn = document.getElementById('hideAnswerBtn');
     const nextBtn = document.getElementById('nextBtn');
-    const retryBtn = document.getElementById('retryBtn');
 
     showBtn.addEventListener('click', showAnswer)
+    hideBtn.addEventListener('click', hideAnswer)
     nextBtn.addEventListener('click', showNext)
-    retryBtn.style.display = 'none';
+    hideBtn.style.display = 'none';
 
     /* Enterで判定 */
     userInput.addEventListener('keydown', (e) => {
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* 判定 */
 function checkAnswer(){
     if (words.length === 0) return;
+    const showBtn = document.getElementById('showAnswerBtn');
+    const hideBtn = document.getElementById('hideAnswerBtn');
 
     const input = document.getElementById('answerInput').value.trim();
     const correct = words[currentIndex].word;
@@ -35,11 +38,15 @@ function checkAnswer(){
     if (input.toLowerCase() === correct.toLowerCase()){
         showCorrect();
         document.getElementById('answer').textContent = correct;
+        showBtn.style.display = 'none';
+        hideBtn.style.display = 'inline-block';
         canGoNext = true;
     }
     else {
         showWrong();
         document.getElementById('answer').textContent = correct;
+        showBtn.style.display = 'none';
+        hideBtn.style.display = 'inline-block';
         canGoNext = false;
     }
 }
@@ -64,8 +71,14 @@ function fetchWord(){
 /* 出題 */
 function showQuestion(){
     canGoNext = false;
+    const showBtn = document.getElementById('showAnswerBtn');
+    const hideBtn = document.getElementById('hideAnswerBtn');
+
     document.getElementById('answer').textContent = "";
     document.getElementById('answerInput').value = "";
+
+    showBtn.style.display = 'inline-block';
+    hideBtn.style.display = 'none';
     resetJudge();
 
     updateProgress();
@@ -74,16 +87,30 @@ function showQuestion(){
         document.getElementById('question').textContent = words[currentIndex].definition
     }
     else {
-        document.getElementById('question').textContent = "全問終了！"
-        document.getElementById('answerInput').style.display = 'none';
+        document.getElementById('quizGrid').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'none';
-        document.getElementById('retryBtn').style.display = 'block';
+        document.getElementById("finishMessage").style.display = "flex";
     }
 }
 
 /* 答え表示 */
 function showAnswer(){
+    const showBtn = document.getElementById('showAnswerBtn');
+    const hideBtn = document.getElementById('hideAnswerBtn');
+
     document.getElementById('answer').textContent = words[currentIndex].word
+    hideBtn.style.display = 'block';
+    showBtn.style.display = 'none';
+}
+
+/* 答え非表示 */
+function hideAnswer(){
+    const showBtn = document.getElementById('showAnswerBtn');
+    const hideBtn = document.getElementById('hideAnswerBtn');
+
+    document.getElementById('answer').textContent = ""
+    hideBtn.style.display = 'none';
+    showBtn.style.display = 'block';
 }
 
 /* 次へ */

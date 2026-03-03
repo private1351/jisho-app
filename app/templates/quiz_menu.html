@@ -6,6 +6,11 @@
     </head>
     <body class="quiz-body">
         {% include 'quiz_header.html' %}
+        <div class="quiz-page-title-wrapper">
+            <div class="quiz-page-title">
+                クイズトップ
+            </div>
+        </div>
         <div class="quiz-menu-grid">
             <!-- 1列1行目 Choose -->
             <img src="{{ url_for('static', filename='image/Choose.png') }}" class="menu-title-img">
@@ -24,10 +29,10 @@
                 </div>
                 <p>出題形式</p>
                 <div class="radio-group">
-                    <input type="radio" name="quiz-type" id="quiz-type-choice" value="1" checked>
-                    <label for="quiz-type-choice">択一</label>
-                    <input type="radio" name="quiz-type" id="quiz-type-description" value="2">
+                    <input type="radio" name="quiz-type" id="quiz-type-description" value="2" checked>
                     <label for="quiz-type-description">記述</label>
+                    <input type="radio" name="quiz-type" id="quiz-type-choice" value="1">
+                    <label for="quiz-type-choice">択一</label>
                 </div>
             </div>
 
@@ -40,7 +45,7 @@
                     </div>
                     <div class="howto-step">
                         <div class="howto-icon">2</div>
-                        <div class="howto-text">出題形式（択一／記述）を選択</div>
+                        <div class="howto-text">出題形式（記述／択一）を選択</div>
                     </div>
                     <div class="howto-step">
                         <div class="howto-icon">3</div>

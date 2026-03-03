@@ -127,7 +127,7 @@ def update_dictionary(dictionary_id):
             dictionary.title = new_title
             dictionary.cover_color = new_color
             db.session.commit()
-            return redirect(url_for('dictionary_detail', dictionary_id=dictionary.id))
+            return redirect(url_for('main.dictionary_detail', dictionary_id=dictionary.id))
     return render_template('dictionary_detail.html', dictionary=dictionary, cover_colors=cover_colors)
 
 #; 辞書の削除

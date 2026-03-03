@@ -2,6 +2,41 @@ const cover = document.getElementById('cover');
 const coverColor = document.getElementById('cover-color');
 const coverTitle = document.getElementById('cover-title');
 const dots = document.querySelectorAll('.color-dot');
+const editToggle = document.getElementById('editToggle');
+const colorPicker = document.getElementById('colorPicker');
+const saveBtn = document.getElementById('saveBtn');
+const deleteBtn = document.getElementById('deleteBtn');
+const openBtn = document.getElementById('openBtn');
+const editNotice = document.getElementById('editNotice');
+const viewNotice = document.getElementById('viewNotice');
+
+setViewMode(false);
+
+editToggle.addEventListener('change', () => {
+    setViewMode(editToggle.checked);
+});
+
+function setViewMode(isEditMode) {
+    if (isEditMode) {
+        // 編集モード
+        coverTitle.removeAttribute('readonly');
+        colorPicker.style.display = 'flex';
+        saveBtn.style.display = 'inline-block';
+        deleteBtn.style.display = 'block';
+        editNotice.style.display = 'block';
+        openBtn.style.display='none';
+        viewNotice.style.display='none';
+    } else {
+        // 閲覧モード
+        coverTitle.setAttribute('readonly', true);
+        colorPicker.style.display = 'none';
+        saveBtn.style.display = 'none';
+        deleteBtn.style.display = 'none';
+        editNotice.style.display = 'none';
+        openBtn.style.display ='block';
+        viewNotice.style.display ='block';
+    }
+}
 
 // カラーピッカーの処理
 dots.forEach(dot => {

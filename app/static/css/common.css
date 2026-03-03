@@ -9,7 +9,7 @@ body {
 
 /* フォント: ヒラギノ明朝体（明朝体） */
 body {
-    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
 }
 
 /* テキストサイズ: 14px */
@@ -20,16 +20,33 @@ body { color: #333333; }
 
 /* 共通ボタン: #333333 */
 button {
-    background-color: #333333;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
-    font-size: 14px;
-    font-weight: bold;
-    text-align: center;
+  background-color: #333333;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* aタグ用 */
+.common-btn {
+  display: inline-block;
+  background-color: #333333;
+  width: 60px;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
 }
 
 .button-container {

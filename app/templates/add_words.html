@@ -6,34 +6,51 @@
     </head>
     <body>
         {% if dictionary %}
+            <div class="dictionary-header"  style="background-color: {{ cover_color}};">
+                <div class="dictionary-header-title">
+                    {{ dictionary.title }}
+                </div>
+            </div>
             <div class="words-page-container">
-                <div class="page-left">
-                    <div class="words-list" id="left-words-list">
-                        {% for word in left_words %}
-                            <div class="word-item" data-word-id="{{ word.id }}">
-                                <input type="hidden" class="line-count" value="0">
-                                <span class="bracket-open">【</span>
-                                <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
-                                <span class="bracket-close">】</span>
-                                <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
-                                <button type="button" class="word-item-delete-btn" title="削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
-                            </div>
-                        {% endfor %}
+                <div class="book-area">
+                    <div class="page-left">
+                        <div class="words-list" id="left-words-list">
+                            {% for word in left_words %}
+                                <div class="word-item" data-word-id="{{ word.id }}">
+                                    <input type="hidden" class="line-count" value="0">
+                                    <span class="bracket-open">【</span>
+                                    <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
+                                    <span class="bracket-close">】</span>
+                                    <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
+                                    <button type="button" class="word-item-delete-btn" title="削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="page-right">
+                        <div class="words-list" id="right-words-list">
+                            {% for word in right_words %}
+                                <div class="word-item" data-word-id="{{ word.id }}">
+                                    <input type="hidden" class="line-count" value="0">
+                                    <span class="bracket-open">【</span>
+                                    <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
+                                    <span class="bracket-close">】</span>
+                                    <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
+                                    <button type="button" class="word-item-delete-btn" title="この単語を削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-                <div class="page-right">
-                    <div class="words-list" id="right-words-list">
-                        {% for word in right_words %}
-                            <div class="word-item" data-word-id="{{ word.id }}">
-                                <input type="hidden" class="line-count" value="0">
-                                <span class="bracket-open">【</span>
-                                <input type="text" class="word-input" value="{{ word.word }}" placeholder="単語" data-word-id="{{ word.id }}">
-                                <span class="bracket-close">】</span>
-                                <textarea class="definition-input" placeholder="意味" data-word-id="{{ word.id }}" rows="2">{{ word.definition }}</textarea>
-                                <button type="button" class="word-item-delete-btn" title="この単語を削除" aria-label="削除" data-word-id="{{ word.id }}">×</button>
-                            </div>
-                        {% endfor %}
-                    </div>
+                <div class="notice-section right">
+                    <h2>【単語登録】</h2>
+                    <ul>
+                        <li>このページでは、単語の登録をします。</li>
+                        <li>追加ボタン押下で入力欄が追加されます。</li>
+                        <li>✕ボタン押下で単語を削除します。</li>
+                        <li>削除は取り消すことができません。</li>
+                        <li>保存して終了ボタン押下で辞書一覧へ遷移します。</li>
+                    </ul>
                 </div>
             </div>
             <div class="save-exit-container">

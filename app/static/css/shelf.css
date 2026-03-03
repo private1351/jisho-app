@@ -37,7 +37,7 @@
     margin: 0;
 }
 
-/* 本カード */
+/* 1冊分 */
 .dictionary-book {
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     cursor: pointer;
