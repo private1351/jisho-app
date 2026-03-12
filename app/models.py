@@ -27,11 +27,10 @@ class Word(db.Model):
     __tablename__ = "words"
     id = db.Column(db.Integer, primary_key=True)
     word = db.Column(db.String(100))
-    definition = db.Column(db.String(100))
+    definition = db.Column(db.Text)
     line_count = db.Column(db.Integer)
     page_index = db.Column(db.Integer)
     dictionary_id = db.Column(db.Integer, db.ForeignKey("dictionaries.id", ondelete="CASCADE"), nullable=False)
-    distractors =  db.relationship("Distractor", back_populates="word", cascade="all, delete-orphan")
 
     # 初期化メソッド
     def __init__(self, word: Optional[str] = None, definition: Optional[str] = None, line_count: Optional[int] = 2, page_index: Optional[int] = None, dictionary_id: Optional[int] = None):
@@ -54,13 +53,6 @@ class Word(db.Model):
             "definition": self.definition,
             "dictionary_id": self.dictionary_id
         }
-
-class Distractor(db.Model):
-    __tablename__ = "distractors"
-    id = db.Column(db.Integer, primary_key=True)
-    distractor = db.Column(db.String(100), nullable=False)
-    word_id = db.Column(db.Integer, db.ForeignKey("words.id", ondelete="CASCADE"), nullable=False)
-    word = relationship("Word", back_populates="distractors")
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"

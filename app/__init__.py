@@ -33,9 +33,12 @@ def _ensure_sqlite_columns():
 def create_app() -> Flask:
     app: Flask = Flask(__name__)
 
-    # データベース設定
+    # データベース設定（instance/jishojisho.db を利用）
+    import os
+    os.makedirs(app.instance_path, exist_ok=True)
+    db_path = os.path.abspath(os.path.join(app.instance_path, 'jishojisho.db')).replace('\\', '/')
     app.config['SECRET_KEY'] = 'secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///jishojisho.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)

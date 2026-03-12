@@ -55,6 +55,12 @@
     min-height: 100vh;
 }
 
+.quiz-body .box,
+.quiz-body .descriptive-quiz,
+.quiz-body .result-panel {
+    color: #333;
+}
+
 .menu-title-img {
     height: 60px;
     align-self: end;
@@ -63,8 +69,8 @@
 
 .quiz-menu-grid {
     display: grid;
-    grid-template-rows: 80px 500px;
-    grid-template-columns: 900px 600px;
+    grid-template-rows: 80px 400px;
+    grid-template-columns: 700px 600px;
     margin-top: 60px;
     justify-content: center;
 }
@@ -72,6 +78,12 @@
 input[type="radio"] {
     accent-color: #0072C2;
     transform: scale(2.5);
+    vertical-align: middle;
+}
+
+input[type="checkbox"] {
+    accent-color: #0072C2;
+    transform: scale(2.0);
     vertical-align: middle;
 }
 
@@ -192,12 +204,14 @@ input[type="radio"] {
     border-bottom: 2px solid #000;
     margin-bottom: 16px;
     padding-bottom: 6px;
+    color: #333;
 }
 
 .question-text {
     font-size: 26px;
     line-height: 1.0;
-    min-height: 100px;
+    min-height: 60px;
+    color: #333;
 }
 
 .answer-area {
@@ -208,12 +222,55 @@ input[type="radio"] {
     padding: 30px 6px 8px;
 }
 
+.choice-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.choice-btn {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 18px 24px;
+    text-align: left;
+    border: 4px solid #000;
+    border-radius: 14px;
+    background: #fffef7;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.12s ease;
+    box-shadow: 4px 4px 0 #000;
+}
+
+.choice-btn:hover {
+    transform: translateY(2px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+.choice-btn:disabled {
+    cursor: default;
+    opacity: 0.8;
+}
+
+.choice-btn.correct {
+    background: #c8e6c9;
+    border-color: #2e7d32;
+}
+
+.choice-btn.wrong {
+    background: #ffcdd2;
+    border-color: #d32f2f;
+}
+
 .answer-input {
     width: 100%;
     font-size: 30px;
     border: none;
     border-bottom: 5px solid #0072C2;
     background: transparent;
+    color: #333;
     outline: none;
     padding: 6px 4px;
 }
@@ -257,6 +314,7 @@ input[type="radio"] {
     text-align: center;
     font-size: 22px;
     margin-bottom: 6px;
+    color: #333;
 }
 
 .progress-bar {
@@ -280,6 +338,7 @@ input[type="radio"] {
     min-height: 60px;
     padding-top: 60px;
     padding-bottom: 20px;
+    color: #333;
 }
 
 .judge.correct {
@@ -294,6 +353,7 @@ input[type="radio"] {
     font-size: 26px;
     text-align: center;
     min-height: 40px;
+    color: #333;
 }
 
 /* クイズ情報用タグ */

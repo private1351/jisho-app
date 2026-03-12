@@ -120,14 +120,17 @@ def update_dictionary(dictionary_id):
         new_color = request.form.get('cover-color', '')
         # バリデーション
         if not new_title:
-            return render_template('dictionary_detail.html',
-                                    cover_colors=cover_colors,
-                                    error='辞書名を入力してください')
+            return render_template(
+                'dictionary_detail.html',
+                dictionary=dictionary,
+                cover_colors=cover_colors,
+                error='辞書名を入力してください',
+            )
         if original_title != new_title or original_color != new_color:
             dictionary.title = new_title
             dictionary.cover_color = new_color
             db.session.commit()
-            return redirect(url_for('main.dictionary_detail', dictionary_id=dictionary.id))
+            return redirect(url_for('main.update_dictionary', dictionary_id=dictionary.id))
     return render_template('dictionary_detail.html', dictionary=dictionary, cover_colors=cover_colors)
 
 #; 辞書の削除
@@ -346,37 +349,54 @@ def quiz_menu():
     return render_template('quiz_menu.html', dictionaries=dictionaries)
 
 # クイズプレイページ
-# 一旦クイズ形式を数字で判別するようにしている
 # 1: 択一
 # 2: 記述
-# とりあえず記述部分のみ実装
 @main.route('/quiz-play/<dict_id>/<int:quiz_type>')
 def quiz_play(dict_id, quiz_type):
     words = Word.query.filter(Word.dictionary_id == dict_id).all()
     dict = Dictionary.query.filter(Dictionary.id == dict_id).first()
     dict_name = dict.title if dict else ""
+    # 択一式クイズ
     if quiz_type == 1:
-        return render_template('quiz_play_choice.html', words=words, quiz_type=quiz_type)
+        incorrect_choices = generate_incorrect_choices(words)
+        quiz_data = []
+        for word in words:
+            choices = incorrect_choices[word.id] + [word.definition]
+            random.shuffle(choices)
+            quiz_data.append({
+                "word": word.word,
+                "correct": word.definition,
+                "choices": choices
+            })
+        random.shuffle(quiz_data)
+        return render_template(
+            'quiz_play_choice.html',
+            quiz_data=quiz_data,
+            dict_id=dict_id,
+            dict_name=dict_name,
+            quiz_type=quiz_type
+        )
+    # 記述式クイズ
     elif quiz_type == 2:
         return render_template('quiz_play_description.html', dict_id=dict_id, quiz_type=quiz_type, dict_name=dict_name)
     else:
         return redirect(url_for('main.quiz_menu'))
 
 def generate_incorrect_choices(words: List[Word]) -> Dict[int, List[str]]:
-    """
-    各単語に対して、択一クイズ用のハズレ選択肢（他単語の定義）を3つずつ割り当てる。
-    word_id -> [定義1, 定義2, 定義3]
-    """
     result: Dict[int, List[str]] = {}
     definitions = [w.definition or "" for w in words]
     for w in words:
         others = [d for d in definitions if d != (w.definition or "")]
-        if len(others) >= 3:
-            result[w.id] = random.sample(others, 3)
+        # 3択問題にするため、誤選択肢は常に2つ用意する
+        if len(others) >= 2:
+            result[w.id] = random.sample(others, 2)
         elif others:
-            result[w.id] = (random.sample(others, len(others)) + others * 2)[:3]
+            # 誤選択肢候補が1つしかない場合は、それを複製して2つにする
+            # 例: ["意味A"] -> ["意味A", "意味A"]
+            result[w.id] = (random.sample(others, len(others)) + others * 2)[:2]
         else:
-            result[w.id] = ["(選択肢)", "(選択肢)", "(選択肢)"]
+            # 他の定義が存在しない場合はダミーの選択肢で埋める（2つ）
+            result[w.id] = ["(選択肢)", "(選択肢)"]
     return result
 
 @main.route('/get-words', methods=['POST'])
@@ -387,6 +407,7 @@ def get_all_words():
     word_list = [word.to_dict() for word in words]
     return jsonify(word_list)
 
+# 未完成
 # WordNetの類似単語取得
 def get_wordnet_similar_words(word: str) -> List[str]:
     similar_words: List[str] = []
