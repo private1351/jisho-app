@@ -19,14 +19,38 @@
             <!-- 1列2行目 問題選択ボックス -->
             <div class="quiz-menu-container box">
                 <p>出題範囲</p>
-                <div class="radio-group">
-                    {% for dictionary in dictionaries %}
-                        <input type="radio" id="dictionary-{{ dictionary.id }}" name="source-dictionary" {% if loop.first %}checked{% endif %}>
-                        <label for="dictionary-{{ dictionary.id }}">
-                            {{ dictionary.title }}
-                        </label>
-                    {% endfor %}
+            <div class="dictionary-filter">
+                <!-- 上段 -->
+                <div class="dictionary-filter-top">
+                    <div class="color-filter">
+                        <div class="color-dot" data-color="#773333" style="background:#773333;"></div>
+                        <div class="color-dot" data-color="#334477" style="background:#334477;"></div>
+                        <div class="color-dot" data-color="#335544" style="background:#335544;"></div>
+                        <div class="color-dot" data-color="#333333" style="background:#333333;"></div>
+                        <div class="color-dot" data-color="#C56700" style="background:#C56700;"></div>
+                    </div>
+                    <label class="favorite-check">
+                        <input type="checkbox" id="favorite-filter">
+                        お気に入りのみ
+                    </label>
                 </div>
+                <!-- 下段 -->
+                <div class="dictionary-filter-bottom">
+                    <div class="select-wrapper">
+                        <select id="dictionary-select">
+                            <option value="">辞書を選択</option>
+                            {% for dictionary in dictionaries %}
+                                <option
+                                    value="{{ dictionary.id }}"
+                                    data-color="{{ dictionary.cover_color }}"
+                                    data-favorite="{{ dictionary.is_favorite | lower }}">
+                                    {{ dictionary.title }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
                 <p>出題形式</p>
                 <div class="radio-group">
                     <input type="radio" name="quiz-type" id="quiz-type-description" value="2" checked>
@@ -35,7 +59,6 @@
                     <label for="quiz-type-choice">択一</label>
                 </div>
             </div>
-
             <!-- 2列2行目 使い方説明ボックス -->
             <div class="quiz-menu-container box">
                 <div class="howto">
@@ -57,16 +80,6 @@
         <div class="quiz-menu-actions">
             <button type="button" id="quiz-play-btn" class="play-btn">PLAY</button>
         </div>
-        <script>
-            document.getElementById('quiz-play-btn').onclick = function() {
-                var ids = [];
-                {% for d in dictionaries %}
-                if (document.getElementById('dictionary-{{ d.id }}').checked) ids.push({{ d.id }});
-                {% endfor %}
-                var quizType = document.querySelector('input[name="quiz-type"]:checked').value;
-                if (ids.length === 0) { alert('出題範囲を1つ以上選んでください'); return; }
-                window.location.href = '/quiz-play/' + ids.join(',') + '/' + quizType;
-            };
-        </script>
+        <script src="{{ url_for('static', filename='js/quiz_menu.js') }}"></script>
     </body>
 </html>

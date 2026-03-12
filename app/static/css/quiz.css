@@ -126,7 +126,8 @@ input[type="radio"] {
     font-family: "Zen Maru Gothic", sans-serif;
     font-size: 30px;
     font-weight: bold;
-    width: 130px;
+    width: 300px;
+    height: 100px;
     padding: 10px;
     background: #0072C2;
     color: #fff;
@@ -433,4 +434,97 @@ input[type="radio"] {
 
 .finish-buttons .play-btn {
     width: 220px;
+}
+
+.dictionary-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 上段 */
+.dictionary-filter-top {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+/* 下段 */
+.dictionary-filter-bottom {
+    display: flex;
+    justify-content: center;
+}
+
+#dictionary-select {
+    font-family: "Zen Maru Gothic", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+
+    padding: 12px 20px;
+    min-width: 260px;
+
+    background: #fffef7;
+    color: #000;
+
+    border: 4px solid #000;
+    border-radius: 14px;
+
+    box-shadow: 6px 6px 0 #000;
+
+    appearance: none;
+    cursor: pointer;
+
+    transition: all 0.12s ease;
+}
+
+/* ホバーで浮かせる */
+#dictionary-select:hover {
+    transform: translateY(4px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+/* フォーカス時 */
+#dictionary-select:focus {
+    outline: none;
+}
+
+.select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.select-wrapper::after {
+    content: "▼";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.color-filter {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.color-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.color-dot:hover {
+    transform: scale(1.2);
+}
+
+.color-dot.active {
+    border: 2px solid #000;
+    transform: scale(1.2);
 }
