@@ -86,14 +86,14 @@ button {
   align-items: center;
   gap: 10px;
   margin: 10px auto;
-  width: 180px;
-  padding: 10px 16px;
+  width: 300px;
+  padding: 15px 20px;
   border-radius: 6px;
   border: 1px solid #ccc;
   background: #333333;
   color: #ffffff;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 24px;
   text-decoration: none;
 }
 
@@ -108,9 +108,11 @@ button {
 }
 
 .title-image {
-  width: 350px;
+  width: 500px;
   height: auto;
   object-fit: contain;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 /* ヘッダー全体 */
