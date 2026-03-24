@@ -5,5 +5,3 @@ Flask-WTF
 Werkzeug
 SQLAlchemy
 WTForms
-nltk
-wordfreq

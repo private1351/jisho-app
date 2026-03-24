@@ -1,14 +1,11 @@
 import random
-import difflib
-from typing import List, Set, Dict
+from typing import List, Dict
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db
 from .models import Dictionary, Word, User
 from .form import LoginForm, RegistrationForm
 from . import login_manager
-from nltk.corpus import wordnet as wn
-from wordfreq import top_n_list
 
 main = Blueprint('main', __name__)
 
@@ -406,36 +403,6 @@ def get_all_words():
     words = Word.query.filter(Word.dictionary_id == dict_id).all()
     word_list = [word.to_dict() for word in words]
     return jsonify(word_list)
-
-# 未完成
-# WordNetの類似単語取得
-def get_wordnet_similar_words(word: str) -> List[str]:
-    similar_words: List[str] = []
-    for syn in wn.synsets(word):
-        if syn is None:
-            continue
-        # 同義語
-        for lemma in (syn.lemmas() or []):
-            w = lemma.name().replace("_", " ")
-            if w.lower() != word.lower():
-                similar_words.append(w)
-        # 同カテゴリ(上位概念)
-        for hypernym in (syn.hypernyms() or []):
-            for lemma in (hypernym.lemmas() or []):
-                similar_words.append(lemma.name().replace("_", " "))
-        # 同カテゴリ(下位概念)
-        for hyponym in (syn.hyponyms() or []):
-            for lemma in (hyponym.lemmas() or []):
-                similar_words.append(lemma.name().replace("_", " "))
-    return similar_words
-
-# スペルが似ている単語取得
-def get_spelling_similar_words(word: str) -> List[str]:
-    # 英語の単語を50000件取得
-    vocab = top_n_list('en', 50000)
-    # n: 最大候補数, cutoff: 類似度の閾値
-    matches = difflib.get_close_matches(word, vocab, n=10, cutoff=0.75)
-    return matches
 
 #; DB全削除(開発用)
 @main.route('/delete-db')
