@@ -103,7 +103,7 @@
     right: 200px;
     top: 200px;
     width: 250px;
-    padding: 12px;
+    padding: 0 12px 12px 12px;
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 10px;
@@ -111,12 +111,40 @@
     font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'Hiragino 明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
     color: #333333;
     z-index: 50;
+    align-items: center;
+    overflow: visible;
+}
+
+.shelf-palette-header {
+    width: calc(100% + 24px);
+    margin: 0 -12px 12px -12px;
+    padding: 10px 18px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, #3f3f3f, #222222);
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    cursor: move;
+    user-select: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
 }
 
 .palette-section + .palette-section {
     margin-top: 12px;
     padding-top: 12px;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.palette-color-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .palette-title {
@@ -127,6 +155,7 @@
 .palette-checkbox {
     display: flex;
     align-items: center;
+    font-size: 18px;
     gap: 6px;
     user-select: none;
 }
@@ -146,7 +175,7 @@
 }
 
 .palette-radio-group {
-    display: grid;
+    display: flex;
     gap: 6px;
     margin-bottom: 10px;
 }
@@ -160,7 +189,7 @@
 
 /* △/▽ トグル */
 .order-toggle {
-    width: 100%;
+    width: 80%;
     padding: 6px 8px;
     border-radius: 8px;
     border: 1px solid #cccccc;
