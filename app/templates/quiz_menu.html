@@ -1,7 +1,9 @@
 <html>
     <head>
-        {% include 'head_css.html' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
+        {% with title='クイズトップ' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
 
     </head>
     <body class="quiz-body">

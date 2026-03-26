@@ -1,5 +1,9 @@
 <html>
-    <head>{% include 'head_css.html' %}</head>
+    <head>
+        {% with title='ログイン' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
+    </head>
     <body>
         <div class="login-container">
             <img src="{{ url_for('static', filename='image/jisho2logo.png') }}" alt="タイトルロゴ" class="login-image">
@@ -13,7 +17,8 @@
                     {{ form.password(size=32, class="textbox-1", placeholder="パスワード", autocomplete="off") }}<br>
                 </p>
                 <p>
-                    <a class="right-link" href="./forgot-password">パスワードをお忘れですか?</a>
+                    <!-- <a class="right-link" href="./forgot-password">パスワードをお忘れですか?</a> -->
+                    <br>
                 </p>
                 <p>
                     {{ form.submit(class="login-button") }}

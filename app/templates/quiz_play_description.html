@@ -1,6 +1,8 @@
 <html>
     <head>
-        {% include 'head_css.html' %}
+        {% with title='クイズ（記述）' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
     </head>
     <body class="quiz-body">
