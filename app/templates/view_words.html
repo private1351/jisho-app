@@ -1,0 +1,117 @@
+<html lang="ja">
+    <head>
+        {% with title='単語閲覧' %}
+            {% include 'head_css.html' %}
+        {% endwith %}
+    </head>
+    <body class="view-words-page">
+        {% if dictionary %}
+            <div class="dictionary-header" style="background-color: {{ cover_color }};">
+                <div class="dictionary-header-title">
+                    {{ dictionary.title }}
+                </div>
+                <div class="dictionary-header-author">
+                    Author: {{ creator_user_name }}
+                </div>
+            </div>
+            <div class="words-page-container">
+                <div class="book-area">
+                    <div class="page-left">
+                        <div class="words-list" id="left-words-list">
+                            {% for word in left_words %}
+                                <div class="word-item" data-word-id="{{ word.id }}">
+                                    <input type="hidden" class="line-count" value="0">
+                                    <span class="bracket-open">【</span>
+                                    <input
+                                        type="text"
+                                        class="word-input"
+                                        value="{{ word.word }}"
+                                        placeholder="単語"
+                                        readonly
+                                        tabindex="-1"
+                                    >
+                                    <span class="bracket-close">】</span>
+                                    <textarea
+                                        class="definition-input"
+                                        placeholder="意味"
+                                        readonly
+                                        tabindex="-1"
+                                        rows="2"
+                                    >{{ word.definition }}</textarea>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="page-right">
+                        <div class="words-list" id="right-words-list">
+                            {% for word in right_words %}
+                                <div class="word-item" data-word-id="{{ word.id }}">
+                                    <input type="hidden" class="line-count" value="0">
+                                    <span class="bracket-open">【</span>
+                                    <input
+                                        type="text"
+                                        class="word-input"
+                                        value="{{ word.word }}"
+                                        placeholder="単語"
+                                        readonly
+                                        tabindex="-1"
+                                    >
+                                    <span class="bracket-close">】</span>
+                                    <textarea
+                                        class="definition-input"
+                                        placeholder="意味"
+                                        readonly
+                                        tabindex="-1"
+                                        rows="2"
+                                    >{{ word.definition }}</textarea>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="save-exit-container">
+                    <div class="action-row page-row">
+                        <button
+                            type="button"
+                            class="nav-button"
+                            title="前のページ"
+                            aria-label="前のページ"
+                            {% if not has_prev %}
+                                disabled
+                            {% else %}
+                                onclick="location.href='{{ url_for('main.view_words', dictionary_id=dictionary.id, page=prev_page) }}'"
+                            {% endif %}
+                        >◁</button>
+                        <div class="page-indicator">
+                            {{ page + 1 }}ページ目
+                        </div>
+                        <button
+                            type="button"
+                            class="nav-button"
+                            title="次のページ"
+                            aria-label="次のページ"
+                            {% if not has_next %}
+                                disabled
+                            {% else %}
+                                onclick="location.href='{{ url_for('main.view_words', dictionary_id=dictionary.id, page=next_page) }}'"
+                            {% endif %}
+                        >▷</button>
+                    </div>
+                    <div class="action-row main-row">
+                        <button
+                            type="button"
+                            title="一覧へ戻る"
+                            aria-label="一覧へ戻る"
+                            onclick="location.href='{{ url_for('main.dictionary_shelf') }}'"
+                        >一覧へ</button>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>辞書が見つかりませんでした。</p>
+        {% endif %}
+        <script src="{{ url_for('static', filename='js/view_words.js') }}"></script>
+    </body>
+</html>
+

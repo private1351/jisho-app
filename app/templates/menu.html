@@ -1,26 +1,121 @@
 <html>
     <head>
         {% include 'head_css.html' %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     </head>
-    <body>
-        <div class="menu-button-container">
-            <img src="{{ url_for('static', filename='image/title.png') }}" alt="タイトル画像" class="title-image">
-            <a class="icon-menu-button" href="/create-dictionary">
-                <i class="fa-solid fa-plus"></i>
-                <span class="label">新規作成</span>
-            </a>
-            <a class="icon-menu-button" href="/dictionary-shelf">
-                <i class="fa-solid fa-list"></i>
-                <span class="label">一覧</span>
-            </a>
-            <a class="icon-menu-button" href="/quiz-menu">
-                <i class="fa-solid fa-question"></i>
-                <span class="label">クイズ</span>
-            </a>
-            <a class="icon-menu-button" href="/logout">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span class="label">ログアウト</span>
-            </a>
+    <body class="dashboard-body">
+        <div class="dashboard-page">
+            <div class="dashboard-header">
+                <img src="{{ url_for('static', filename='image/title.png') }}" alt="タイトル画像" class="title-image">
+            </div>
+
+            <div class="dashboard-grid">
+                <section class="dashboard-card user-card">
+                    <h2 class="card-title">
+                        <i class="fa-solid fa-user"></i>
+                        ユーザー情報
+                    </h2>
+
+                    <div class="card-divider"></div>
+
+                    <div class="user-name-row">
+                        <span class="user-name">{{ current_user.username }}</span>
+                        {% if current_user.is_guest %}
+                            <span class="user-badge">guest</span>
+                        {% endif %}
+                    </div>
+
+                    <ul class="dashboard-info-list">
+                        <li>作成した辞書数：{{ created_dictionary_count }}</li>
+                        <li>お気に入り辞書数：{{ favorite_count }}</li>
+                    </ul>
+
+                    <div class="card-divider"></div>
+
+                    <h3 class="sub-title">最近更新した辞書</h3>
+                    <ul class="recent-dictionary-list">
+                        {% for dictionary in recent_dictionaries %}
+                            <li>
+                                <span class="color-dot-mini"
+                                      style="background-color: {{ dictionary.cover_color }};"></span>
+                                {{ dictionary.title }}
+                            </li>
+                        {% else %}
+                            <li>まだ辞書がありません</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <section class="dashboard-card recommendation-card">
+                    <h2 class="card-title">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        おすすめ
+                    </h2>
+
+                    <div class="card-divider"></div>
+
+                    {% if recommended_dictionary %}
+                        <p class="recommend-text">今日はこの辞書で復習！</p>
+
+                        <div class="recommend-dictionary">
+                            <span class="recommend-color-dot"
+                                  style="background-color: {{ recommended_dictionary.cover_color }};"></span>
+                            <span class="recommend-dictionary-title">
+                                {{ recommended_dictionary.title }}
+                            </span>
+                        </div>
+
+                        <div class="recommend-actions">
+                            <a href="{{ url_for('main.quiz_play', dict_id=recommended_dictionary.id, quiz_type=2) }}"
+                               class="recommend-start-button">
+                                記述で開始
+                            </a>
+
+                            <a href="{{ url_for('main.quiz_play', dict_id=recommended_dictionary.id, quiz_type=1) }}"
+                               class="recommend-sub-button">
+                                択一で開始
+                            </a>
+
+                            <a href="{{ url_for('main.index') }}" class="recommend-refresh-button">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                別の辞書を提案
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="recommend-empty">辞書を作成するとおすすめが表示されます。</p>
+                        {% if not current_user.is_guest %}
+                        <a href="{{ url_for('main.create_dictionary') }}" class="recommend-start-button">
+                            <i class="fa-solid fa-plus"></i>
+                            辞書を作成する
+                        </a>
+                        {% endif %}
+                    {% endif %}
+                </section>
+
+                <div class="dashboard-action-grid">
+                    {% if not current_user.is_guest %}
+                    <a class="action-card action-create" href="/create-dictionary">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>新規作成</span>
+                    </a>
+                    {% endif %}
+
+                    <a class="action-card action-list" href="/dictionary-shelf">
+                        <i class="fa-solid fa-book"></i>
+                        <span>辞書一覧</span>
+                    </a>
+
+                    <a class="action-card action-quiz" href="/quiz-menu">
+                        <i class="fa-solid fa-question"></i>
+                        <span>クイズ</span>
+                    </a>
+
+                    <a class="action-card action-logout" href="/logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>ログアウト</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </body>
 </html>

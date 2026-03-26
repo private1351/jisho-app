@@ -26,6 +26,7 @@
                         <li>辞書名は18文字以内で入力してください。</li>
                         <li>表紙の色は下部から選択してください。</li>
                         <li>辞書名、色ともに後から変更できます。</li>
+                        <li>PRIVATEにすると他のユーザーからは見えません。</li>
                         <li>次へボタン押下で単語登録へ進みます。</li>
                     </ul>
                 </div>
@@ -35,6 +36,11 @@
                     <div class="color-dot" data-color="{{ color }}"></div>
                 {% endfor %}
             </div>
+            <div class="privacy-toggle" onclick="togglePrivacy()">
+                <i id="lockIcon" class="fa-solid fa-lock-open"></i>
+                <span id="privacyText">PUBLIC</span>
+            </div>
+            <input type="hidden" id="isPrivate" name="is_private" value="false">
             <button type="submit" >次へ ▶</button>
         </form>
         <script src="{{ url_for('static', filename='js/create_dictionary.js') }}"></script>

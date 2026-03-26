@@ -11,13 +11,9 @@
                 クイズトップ
             </div>
         </div>
-        <div class="quiz-menu-grid">
-            <!-- 1列1行目 Choose -->
-            <img src="{{ url_for('static', filename='image/Choose.png') }}" class="menu-title-img">
-            <!-- 2列1行目 How To-->
-            <img src="{{ url_for('static', filename='image/HowTo.png') }}" class="menu-title-img">
-            <!-- 1列2行目 問題選択ボックス -->
+            <!-- 問題選択ボックス -->
             <div class="quiz-menu-container box">
+                <button type="button" id="help-open-button" class="help-open-button">?</button>
                 <p>出題範囲</p>
             <div class="dictionary-filter">
                 <!-- 上段 -->
@@ -58,27 +54,22 @@
                     <input type="radio" name="quiz-type" id="quiz-type-choice" value="1">
                     <label for="quiz-type-choice">択一</label>
                 </div>
-            </div>
-            <!-- 2列2行目 使い方説明ボックス -->
-            <div class="quiz-menu-container box">
-                <div class="howto">
-                    <div class="howto-step">
-                        <div class="howto-icon">1</div>
-                        <div class="howto-text">出題する辞書を1つ選択</div>
-                    </div>
-                    <div class="howto-step">
-                        <div class="howto-icon">2</div>
-                        <div class="howto-text">出題形式（記述／択一）を選択</div>
-                    </div>
-                    <div class="howto-step">
-                        <div class="howto-icon">3</div>
-                        <div class="howto-text">PLAYボタンでクイズ開始！</div>
-                    </div>
+                <div class="quiz-menu-actions quiz-menu-actions--in-panel">
+                    <button type="button" id="quiz-play-btn" class="play-btn">PLAY</button>
                 </div>
             </div>
         </div>
-        <div class="quiz-menu-actions">
-            <button type="button" id="quiz-play-btn" class="play-btn">PLAY</button>
+        <div id="help-modal" class="help-modal hidden">
+            <div class="help-modal-overlay" id="help-modal-overlay"></div>
+
+            <div class="help-modal-content">
+                <button type="button" id="help-close-button" class="help-close-button">×</button>
+                <h2 class="help-modal-title">How To</h2>
+
+                <div class="help-step"><span>1</span> 出題する辞書を1つ選択</div>
+                <div class="help-step"><span>2</span> 出題形式（記述／択一）を選択</div>
+                <div class="help-step"><span>3</span> PLAYボタンでクイズ開始！</div>
+            </div>
         </div>
         <script src="{{ url_for('static', filename='js/quiz_menu.js') }}"></script>
     </body>

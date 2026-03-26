@@ -10,6 +10,7 @@
     const orderBtn = document.getElementById('order-toggle');
     const sortRadios = Array.from(document.querySelectorAll('input[type="radio"][name="sort"]'));
     const favOnlyCheckbox = document.getElementById('fav-only');
+    const mineOnlyCheckbox = document.getElementById('mine-only');
 
     if (!picker || !clearBtn || !orderBtn || sortRadios.length === 0 || !favOnlyCheckbox) return;
 
@@ -42,6 +43,9 @@
         if (favOnlyCheckbox.checked) params.set('fav', '1');
         else params.delete('fav');
 
+        if (mineOnlyCheckbox && mineOnlyCheckbox.checked) params.set('mine', '1');
+        else params.delete('mine');
+
         const qs = params.toString();
         window.location.href = baseUrl + (qs ? ('?' + qs) : '');
     }
@@ -68,6 +72,7 @@
     });
 
     favOnlyCheckbox.addEventListener('change', navigateWithParams);
+    mineOnlyCheckbox?.addEventListener('change', navigateWithParams);
 
     document.addEventListener('click', async (e) => {
         const btn = e.target.closest('.favorite-toggle');

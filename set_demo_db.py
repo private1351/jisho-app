@@ -12,7 +12,7 @@ import argparse
 from typing import Sequence
 
 from app import create_app, db
-from app.models import Dictionary, Word
+from app.models import Dictionary, Word, User
 
 
 def _add_words(dictionary_id: int, page_index: int, items: Sequence[tuple[str, str, int]]) -> None:
@@ -70,7 +70,22 @@ def seed(reset: bool) -> None:
     for title, color in demo_dicts:
         if title in existing_titles:
             continue
-        d = Dictionary(title=title, cover_color=color)
+        if User.query.filter_by(username="kumada").first() is None:
+            user = User()
+            user.username = "kumada"
+            user.set_password("kumada")
+            user.is_guest = False
+            db.session.add(user)
+            db.session.commit()
+        else:
+            user = User.query.filter_by(username="kumada").first()
+        if user is None:
+            raise RuntimeError("kumadaのアカウントが見つかりません")
+        user_id = user.id
+        if user_id is None:
+            raise RuntimeError("kumadaのアカウントのIDが見つかりません")
+        # kumadaのアカウントでデモデータを作成する。
+        d = Dictionary(title=title, cover_color=color, creator_user_id=user_id, is_private=False)
         db.session.add(d)
         created_dicts.append(d)
 

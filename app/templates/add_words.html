@@ -55,11 +55,11 @@
             </div>
             <div class="save-exit-container">
                 <div class="action-row page-row">
-                    <button type="button" id="prev-page-button" class="nav-button" title="前のページ" aria-label="前のページ" {% if page == 0 %}disabled{% endif %}>◁</button>
+                    <button type="button" id="prev-page-button" class="nav-button" title="前のページ" aria-label="前のページ" {% if not has_prev %}disabled{% endif %}>◁</button>
                     <div class="page-indicator">
                         {{ page + 1 }}ページ目
                     </div>
-                    <button type="button" id="next-page-button" class="nav-button" title="次のページ" aria-label="次のページ">▷</button>
+                    <button type="button" id="next-page-button" class="nav-button" title="次のページ" aria-label="次のページ" {% if not has_next %}disabled{% endif %}>▷</button>
                 </div>
                 <div class="action-row main-row">
                     <button type="button" id="add-row-button">追加</button>

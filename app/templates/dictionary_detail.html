@@ -6,13 +6,7 @@
     </head>
     {% include 'main_header.html' %}
     <body>
-        <div class="toggle-container">
-            <p>閲覧／編集</p>
-            <label class="toggle-button-1">
-                <input type="checkbox" id="editToggle"/>
-            </label>
-        </div>
-        <form action="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}" method="post">
+        <form id="dictionary-update-form" action="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}" method="post">
             <div class="cover-container">
                 <div class="book-cover" id="cover">
                     <input type="hidden" id="cover-color" name="cover-color" value="{{ dictionary.cover_color }}">
@@ -29,18 +23,11 @@
                 <div class="notice-section" id="editNotice">
                     <h2>【編集】</h2>
                     <ul>
-                        <li>左上のトグルで閲覧モードに切り替えます。</li>
                         <li>このページでは、辞書の編集を行います。</li>
                         <li>辞書名は18文字以内で入力してください。</li>
                         <li>表紙の色は下部から選択してください。</li>
                         <li>保存ボタン押下で変更が保存されます。</li>
                         <li>削除ボタン押下でこの辞書を削除します。</li>
-                    </ul>
-                </div>
-                <div class="notice-section" id="viewNotice">
-                    <h2>【閲覧】</h2>
-                    <ul>
-                        <li>左上のトグルで編集モードに切り替えます。</li>
                         <li>開くボタン押下で単語の編集へ進みます。</li>
                     </ul>
                 </div>
@@ -50,17 +37,21 @@
                 <div class="color-dot" data-color="{{ color }}"></div>
                 {% endfor %}
             </div>
-            <div class="button-container">
-                <button type="submit" id="saveBtn">保存</button>
+            <div class="privacy-toggle" id="privacyToggle" onclick="togglePrivacy()">
+                <i id="lockIcon" class="fa-solid fa-lock-open"></i>
+                <span id="privacyText">{{ "PRIVATE" if dictionary.is_private else "PUBLIC" }}</span>
             </div>
+            <input type="hidden" id="isPrivate" name="is_private" value="{{ 'true' if dictionary.is_private else 'false' }}">
         </form>
         <form
+            id="dictionary-delete-form"
             action="{{ url_for('main.delete_dictionary', dictionary_id=dictionary.id) }}"
             method="post"
             onsubmit="return confirm('この辞書を削除しますか？');">
-            <button style="background-color: #8b0000;" type="submit" id="deleteBtn">削除</button>
         </form>
-        <div class="button-container">
+        <div class="button-container dictionary-detail-actions">
+            <button type="submit" form="dictionary-update-form" id="saveBtn">保存</button>
+            <button type="submit" form="dictionary-delete-form" style="background-color: #8b0000;" id="deleteBtn">削除</button>
             <a class="common-btn" id="openBtn" href="{{ url_for('main.add_words', dictionary_id=dictionary.id, page=0) }}">開く</a>
         </div>
         <script src="{{ url_for('static', filename='js/edit_dictionary.js') }}"></script>

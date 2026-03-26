@@ -14,14 +14,20 @@ class Dictionary(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_favorite = db.Column(db.Boolean, nullable=False, default=False)
+    creator_user_id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    is_private = db.Column(db.Boolean, nullable=False, default=False)
 
     # 初期化メソッド
-    def __init__(self, title: Optional[str] = None, cover_color: Optional[str] = None):
+    def __init__(self, title: Optional[str] = None, cover_color: Optional[str] = None, creator_user_id: Optional[int] = None, is_private: Optional[bool] = False):
         super().__init__()
         if title is not None:
             self.title = title
         if cover_color is not None:
             self.cover_color = cover_color
+        if creator_user_id is not None:
+            self.creator_user_id = creator_user_id
+        if is_private is not None:
+            self.is_private = is_private
 
 class Word(db.Model):
     __tablename__ = "words"
@@ -59,6 +65,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    is_guest = db.Column(db.Boolean, nullable=False, default=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

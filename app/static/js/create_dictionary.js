@@ -38,3 +38,25 @@ coverTitle.addEventListener('keydown', function(e) {
         e.preventDefault();
     }
 });
+
+let isPrivate = false;
+
+function togglePrivacy() {
+    const icon = document.getElementById("lockIcon");
+    const text = document.getElementById("privacyText");
+    const input = document.getElementById("isPrivate");
+
+    isPrivate = !isPrivate;
+
+    if (isPrivate) {
+        icon.classList.remove("fa-lock-open");
+        icon.classList.add("fa-lock");
+        text.textContent = "PRIVATE";
+        input.value = "true";
+    } else {
+        icon.classList.remove("fa-lock");
+        icon.classList.add("fa-lock-open");
+        text.textContent = "PUBLIC";
+        input.value = "false";
+    }
+}

@@ -55,3 +55,31 @@ document.getElementById('quiz-play-btn').onclick = function() {
 
     window.location.href = '/quiz-play/' + selectedId + '/' + quizType;
 };
+
+// ▶ How To
+window.addEventListener('load', () => {
+    const openButton = document.getElementById('help-open-button');
+    const closeButton = document.getElementById('help-close-button');
+    const overlay = document.getElementById('help-modal-overlay');
+    const modal = document.getElementById('help-modal');
+
+    if (!openButton || !closeButton || !overlay || !modal) return;
+
+    openButton.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    closeButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    overlay.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            modal.classList.add('hidden');
+        }
+    });
+});

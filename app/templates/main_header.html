@@ -2,10 +2,57 @@
     <a href="/"><i class="fa-solid fa-house"></i></a>
     <nav class="nav">
         <ul class="menu-list menu-header">
+            {% if not current_user.is_guest %}
             <li class="menu-item"><a href="/create-dictionary">新規作成</a></li>
             <li class="menu-item"><a href="/dictionary-shelf">一覧</a></li>
+            {% endif %}
             <li class="menu-item"><a href="/quiz-menu">クイズ</a></li>
-            <li class="menu-item"><a href="/logout">ログアウト</a></li>
+            <li class="menu-item">
+                <div class="app-header-user">
+                    <i class="fa-solid fa-circle-user" id="user-menu-open"></i>
+                </div>
+            </li>
         </ul>
     </nav>
+    <div id="user-modal" class="user-modal hidden">
+        <div class="user-modal-overlay" id="user-modal-overlay"></div>
+
+        <div class="user-modal-content" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+            <button type="button" id="user-modal-close" class="user-modal-close">×</button>
+
+            <h2 id="user-modal-title" class="user-modal-title">アカウント設定</h2>
+
+            <div class="user-modal-section">
+                <div class="user-current">
+                    <span>{{ current_user.username }}</span>
+                    <span class="user-status-label">ログイン中</span>
+                </div>
+            </div>
+
+            {% if not current_user.is_guest %}
+            <form method="post" action="{{ url_for('main.change_username') }}" class="user-modal-form">
+                <div class="user-modal-label">ユーザー名変更</div>
+                <input type="text" name="new_username" class="user-modal-input" placeholder="新しいユーザー名" required>
+                <button type="submit" class="user-modal-action-button">変更する</button>
+            </form>
+
+            <form method="post" action="{{ url_for('main.change_password') }}" class="user-modal-form">
+                <div class="user-modal-label">パスワード変更</div>
+                <input type="password" name="current_password" class="user-modal-input" placeholder="現在のパスワード" required>
+                <input type="password" name="new_password" class="user-modal-input" placeholder="新しいパスワード" required>
+                <input type="password" name="new_password_confirm" class="user-modal-input" placeholder="新しいパスワード（確認）" required>
+                <button type="submit" class="user-modal-action-button">変更する</button>
+            </form>
+            {% else %}
+            <div class="user-modal-section">
+                <div class="user-modal-note">ゲストユーザーはユーザー名・パスワードを変更できません。</div>
+            </div>
+            {% endif %}
+
+            <form method="get" action="{{ url_for('main.logout') }}">
+                <button type="submit" class="user-modal-logout-button">ログアウト</button>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/header_user.js') }}"></script>
 </header>

@@ -235,6 +235,15 @@ form button[type="submit"]:hover {
   margin-left: -6px;
 }
 
+/* 閲覧ページでは【 単語 】の余白を広げる */
+.view-words-page .bracket-open {
+  margin-right: 6px;
+}
+
+.view-words-page .bracket-close {
+  margin-left: 6px;
+}
+
 /* 単語入力 */
 .word-input {
   width: auto;
@@ -296,7 +305,7 @@ form button[type="submit"]:hover {
 }
 
 .save-exit-container {
-  position: fixed;
+  position:fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
@@ -422,56 +431,22 @@ form button[type="submit"]:hover {
   color: #666;
 }
 
-.toggle-container {
-  margin-left: 40px;
-  display: flex;
-  font-size: 25px;
-  align-items: center;
-  gap: 10px;
-}
-
-.toggle-button-1 {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 40px;
-  border-radius: 40px;
-  background-color: #dddddd;
-  cursor: pointer;
-  transition: background-color .4s;
-}
-
-.toggle-button-1:has(:checked) {
-  background-color: #2e2e2e;
-}
-
-.toggle-button-1::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgb(0 0 0 / 20%);
-  background-color: #fff;
-  content: '';
-  transition: left .4s;
-}
-
-.toggle-button-1:has(:checked)::after {
-  left: 40px;
-}
-
-.toggle-button-1 input {
-  display: none;
-}
-
 .button-container {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 16px;
   margin-top: 20px;
+}
+
+/* 辞書詳細: 保存・削除を同一行に */
+.dictionary-detail-actions {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.dictionary-detail-actions button {
+  font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
 }
 
 
@@ -482,6 +457,7 @@ form button[type="submit"]:hover {
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: relative;
 }
 
 .dictionary-header-title {
@@ -489,4 +465,37 @@ form button[type="submit"]:hover {
   font-weight: bold;
   color: white;
   text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.dictionary-header-author {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 23px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.35);
+}
+
+.privacy-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: fit-content;
+  margin: 20px auto 24px auto;
+
+  cursor: pointer;
+  font-size: 20px;
+  color: #444;
+}
+
+.privacy-toggle i {
+  font-size: 26px;
+}
+
+.privacy-toggle:hover {
+  opacity: 0.7;
 }

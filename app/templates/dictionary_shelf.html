@@ -17,11 +17,20 @@
                     {% for dictionary in dictionaries %}
                         <div class="dictionary-shelf-tile" data-dictionary-id="{{ dictionary.id }}">
                             <div class="dictionary-book">
-                            <a href="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}"
+                            <a href="{{ url_for('main.view_words', dictionary_id=dictionary.id, page=0) }}"
                                 style="background-color: {{ dictionary.cover_color }};"
                                 class="dictionary-shelf-item">
                                 {{ dictionary.title }}
                             </a>
+
+                            {% if (not current_user.is_guest) and (dictionary.creator_user_id == current_user.id) %}
+                                <a
+                                    class="shelf-edit-link"
+                                    href="{{ url_for('main.update_dictionary', dictionary_id=dictionary.id) }}"
+                                    title="編集"
+                                    aria-label="編集"
+                                ><i class="fa-regular fa-pen-to-square"></i></a>
+                            {% endif %}
                             <button
                                 type="button"
                                 class="favorite-toggle {% if dictionary.is_favorite %}is-favorite{% endif %}"
@@ -45,6 +54,14 @@
                         お気に入りのみ
                     </label>
                 </div>
+                {% if not current_user.is_guest %}
+                <div class="palette-section">
+                    <label class="palette-checkbox">
+                        <input type="checkbox" id="mine-only" {% if mine_only %}checked{% endif %}>
+                        自分の辞書のみ
+                    </label>
+                </div>
+                {% endif %}
 
                 <div class="palette-section">
                     <div class="palette-title">色</div>
