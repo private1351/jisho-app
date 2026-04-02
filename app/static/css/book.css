@@ -138,12 +138,17 @@ form button[type="submit"]:hover {
 .words-page-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 32px 16px;
+  align-items: flex-start;
+  padding: 24px 16px;
   position: relative;
   gap: 32px;
-  align-items: flex-start;
+  margin-top: 32px;
+  box-sizing: border-box;
+}
+
+/* 辞書ヘッダー＋本コンテンツで min-height が二重に効かないよう、残りビューポートに合わせる */
+.dictionary-header + .words-page-container {
+  min-height: calc(100dvh - 92px);
 }
 
 /* 左ページ */
@@ -293,15 +298,6 @@ form button[type="submit"]:hover {
 
 .book-area {
   display: flex;
-}
-.words-page-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 80px);
-  padding: 24px 16px;
-  position: relative;
-  margin-top: 32px;
 }
 
 .save-exit-container {

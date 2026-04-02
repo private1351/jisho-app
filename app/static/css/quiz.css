@@ -78,6 +78,7 @@
     font-size: 18px;
     font-weight: bold;
     min-height: 100vh;
+    min-height: 100dvh;
     background: linear-gradient(180deg, #6fb98f, #5aa57c);
 }
 

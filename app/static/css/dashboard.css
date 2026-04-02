@@ -1,70 +1,96 @@
+/* メニュー（/ index）: 辞書まわりと揃えて約 80% スケール + 画面幅に収める */
 .dashboard-body {
     margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
     background: #f6f3eb;
     color: #2d2d2d;
     font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', serif;
-    /* common.css の overflow: hidden を上書きして見切れを防ぐ */
-    overflow: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.dashboard-body .title-image {
+    display: block;
+    width: min(400px, calc(100vw - 32px));
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    margin: clamp(8px, 2vh, 16px) auto clamp(12px, 3vh, 24px);
+    box-sizing: border-box;
 }
 
 .dashboard-page {
-    max-width: 944px;
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: min(755px, calc(100vw - 24px));
     margin: 0 auto;
-    padding: 32px 19px 64px;
+    padding-top: clamp(12px, 2.5vw, 26px);
+    padding-bottom: clamp(20px, 4vh, 51px);
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
     box-sizing: border-box;
 }
 
 .dashboard-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 29px;
+    margin-bottom: clamp(12px, 2.5vw, 23px);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 19px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(10px, 2vw, 15px);
     align-items: start;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .dashboard-card {
     background: #fffdf8;
     border: 2px solid #d7d1c7;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 13px;
+    padding: clamp(12px, 3vw, 18px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     box-sizing: border-box;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 .card-title {
     margin: 0;
-    font-size: 22px;
+    font-size: 18px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .card-divider {
     height: 1px;
     background: #ded7cb;
-    margin: 14px 0;
+    margin: 11px 0;
 }
 
 .user-name-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 13px;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .user-name {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 .user-badge {
-    font-size: 10px;
-    padding: 2px 8px;
+    font-size: 9px;
+    padding: 2px 6px;
     border-radius: 999px;
     background: #ece7de;
 }
@@ -72,54 +98,56 @@
 .dashboard-info-list,
 .recent-dictionary-list {
     margin: 0;
-    padding-left: 16px;
+    padding-left: 13px;
     line-height: 1.9;
-    font-size: 16px;
+    font-size: 13px;
 }
 
 .sub-title {
-    margin: 0 0 10px;
-    font-size: 18px;
+    margin: 0 0 8px;
+    font-size: 14px;
 }
 
 .color-dot-mini {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    margin-right: 6px;
+    margin-right: 5px;
 }
 
 .dashboard-action-grid {
     grid-column: 1 / span 2;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(8px, 2vw, 11px);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .action-card {
-    min-height: 136px;
-    border-radius: 16px;
+    min-height: clamp(88px, 18vw, 109px);
+    border-radius: 13px;
     text-decoration: none;
     color: #2d2d2d;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    font-size: 22px;
+    gap: 11px;
+    font-size: 18px;
     font-weight: bold;
     border: 2px solid #d7d1c7;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     transition: transform 0.15s ease;
 }
 
 .action-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
 }
 
 .action-card i {
-    font-size: 34px;
+    font-size: 27px;
 }
 
 .action-create {
@@ -155,11 +183,11 @@
     }
 
     .card-title {
-        font-size: 19px;
+        font-size: 15px;
     }
 
     .user-name {
-        font-size: 19px;
+        font-size: 15px;
     }
 }
 
@@ -168,37 +196,37 @@
 }
 
 .recommend-text {
-    margin: 0 0 14px;
-    font-size: 16px;
+    margin: 0 0 11px;
+    font-size: 13px;
     line-height: 1.7;
 }
 
 .recommend-dictionary {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 18px;
-    padding: 11px 13px;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 9px 10px;
     background: #f7f2e7;
-    border-radius: 11px;
+    border-radius: 9px;
 }
 
 .recommend-color-dot {
-    width: 11px;
-    height: 11px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
 .recommend-dictionary-title {
-    font-size: 19px;
+    font-size: 15px;
     font-weight: bold;
 }
 
 .recommend-actions {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .recommend-start-button,
@@ -207,11 +235,11 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     text-decoration: none;
     border-radius: 999px;
-    padding: 11px 16px;
-    font-size: 14px;
+    padding: 9px 13px;
+    font-size: 11px;
     font-weight: bold;
 }
 
@@ -231,7 +259,7 @@
 }
 
 .recommend-empty {
-    font-size: 14px;
+    font-size: 11px;
     line-height: 1.8;
-    margin-bottom: 14px;
+    margin-bottom: 11px;
 }

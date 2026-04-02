@@ -4,10 +4,13 @@ body {
   background-color: #F7F6EB;
   margin: 0;
   padding: 0;
-  /* 画面が小さい環境でも見切れないようにする */
+  box-sizing: border-box;
+  /* padding と min-height を足し算しない（常時 1 画面分の余計なスクロールを防ぐ） */
+  /* あふれたときだけウィンドウがスクロールする */
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* フォント: ヒラギノ明朝体（明朝体） */
