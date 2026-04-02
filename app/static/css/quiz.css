@@ -168,13 +168,34 @@ input[type="checkbox"] {
     color: #000;
 }
 
-/* 記述クイズ用 */
 .main-center {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+.result-panel-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    max-width: calc(100vw - 32px);
+    padding: 20px 32px 32px;
+    background-color: #fffef7;
+    border: 5px solid #000;
+    border-radius: 14px;
+    box-shadow: 11px 11px 0 #000;
+    box-sizing: border-box;
+}
+
+.result-panel-container > p {
+    position: relative;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1;
 }
 
 .quiz-description-grid {
@@ -187,6 +208,78 @@ input[type="checkbox"] {
 }
 
 .quiz-description-grid > * {
+    min-width: 0;
+}
+
+/* 択一のみ: flex + stretch で左右の高さを一致（子の height:80% は親が不定だと揃わない） */
+.quiz-play-choice .main-center {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.quiz-play-choice .quiz-description-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 40px;
+    /* 行幅に収めてブロックごと中央へ（width:100% だと子の max-width 等で左寄りに見えることがある） */
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+    grid-template-columns: unset;
+}
+
+.quiz-play-choice .quiz-description-grid > .descriptive-quiz,
+.quiz-play-choice .quiz-description-grid > .result-panel {
+    box-sizing: border-box;
+    height: auto;
+    min-height: 0;
+    align-self: stretch;
+}
+
+.quiz-play-choice .quiz-description-grid > .descriptive-quiz {
+    flex: 0 1 700px;
+    width: 700px;
+    min-width: 0;
+    max-width: min(700px, calc(100vw - 48px));
+}
+
+.quiz-play-choice .quiz-description-grid > .result-panel {
+    flex: 0 1 400px;
+    width: 400px;
+    min-width: 0;
+    max-width: min(400px, calc(100vw - 48px));
+}
+
+@media (max-width: 1200px) {
+    .quiz-play-choice .quiz-description-grid {
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: min(700px, calc(100vw - 32px));
+    }
+
+    .quiz-play-choice .quiz-description-grid > .descriptive-quiz,
+    .quiz-play-choice .quiz-description-grid > .result-panel {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: min(700px, calc(100vw - 32px));
+    }
+}
+
+.quiz-choice-grid {
+    display: grid;
+    grid-template-columns: 800px 400px;
+    margin-top: 60px;
+    justify-content: center;
+    column-gap: 40px;
+    align-items: stretch;
+}
+
+.quiz-choice-grid > * {
     height: 100%;
 }
 
@@ -197,8 +290,15 @@ input[type="checkbox"] {
     background: #fffef7;
 }
 
+.choice-descriptive-quiz {
+    max-width: 90%;
+    height: 80%;
+    padding: 30px;
+    background: #fffef7;
+}
+
 .section-title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
     border-bottom: 2px solid #000;
     margin-bottom: 16px;
@@ -207,14 +307,15 @@ input[type="checkbox"] {
 }
 
 .question-text {
-    font-size: 26px;
+    font-size: 22px;
     line-height: 1.0;
     min-height: 60px;
     color: #333;
 }
 
-.answer-area {
+.choice-answer-area {
     margin-top: 40px;
+    margin-bottom: 20px;
 }
 
 .answer-sheet {
@@ -224,28 +325,26 @@ input[type="checkbox"] {
 .choice-buttons {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 10px;
     margin-top: 20px;
 }
 
 .choice-btn {
     font-family: "Zen Maru Gothic", sans-serif;
-    font-size: 22px;
+    font-size: 16px;
     font-weight: bold;
-    padding: 18px 24px;
+    padding: 10px 20px;
     text-align: left;
-    border: 4px solid #000;
+    border: 2px solid #000;
     border-radius: 14px;
     background: #fffef7;
     color: #333;
     cursor: pointer;
     transition: all 0.12s ease;
-    box-shadow: 4px 4px 0 #000;
 }
 
 .choice-btn:hover {
     transform: translateY(2px);
-    box-shadow: 2px 2px 0 #000;
 }
 
 .choice-btn:disabled {
@@ -280,6 +379,10 @@ input[type="checkbox"] {
     margin-top: 30px;
 }
 
+.choice-question-area {
+    max-height: 100px;
+}
+
 .submit-btn {
     font-size: 20px;
     padding: 10px 40px;
@@ -289,6 +392,7 @@ input[type="checkbox"] {
     border-radius: 14px;
     cursor: pointer;
     font-family: "Zen Maru Gothic", sans-serif;
+    margin-bottom: 20px;
 }
 
 /* 進捗 */
@@ -297,8 +401,8 @@ input[type="checkbox"] {
     flex-direction: column;
     align-items: center;
     gap: 26px;
-    padding: 40px;
-    height: 80%;
+    padding: 20px;
+    height: 100%;
     width: 80%;
     justify-content: space-between;
 }
@@ -350,7 +454,7 @@ input[type="checkbox"] {
 }
 
 .answer-text {
-    font-size: 26px;
+    font-size: 20px;
     text-align: center;
     min-height: 40px;
     color: #333;
@@ -444,13 +548,11 @@ input[type="checkbox"] {
     font-size: 20px;
     font-weight: bold;
 
-    background: #FFD54F;
-    color: #000;
+    background: #0072C2;
+    color: #FFF;
+    border: 3px solid #FFF;
 
-    border: 4px solid #000;
     border-radius: 14px;
-
-    box-shadow: 6px 6px 0 #000;
 
     text-decoration: none;
     transition: all 0.12s ease;
@@ -458,7 +560,6 @@ input[type="checkbox"] {
 
 .back-btn:hover {
     transform: translateY(4px);
-    box-shadow: 2px 2px 0 #000;
 }
 
 #finishMessage {
@@ -473,7 +574,7 @@ input[type="checkbox"] {
 }
 
 .finish-title {
-    font-size: 42px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 40px;
 }
@@ -628,19 +729,22 @@ input[type="checkbox"] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 520px;
+    width: 440px;
     max-width: calc(100vw - 32px);
-    padding: 28px 28px 24px 28px;
+    max-height: min(80vh, 360px);
+    padding: 18px 20px 16px;
     background: #f5f3ee;
     border: 4px solid #111111;
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 10px 10px 0 #111111;
     box-sizing: border-box;
+    overflow-y: auto;
+    z-index: 1;
 }
 
 .help-modal-title {
-    margin: 0 0 20px 0;
-    font-size: 42px;
+    margin: 0 0 12px 0;
+    font-size: 32px;
     font-weight: bold;
 }
 
@@ -665,19 +769,219 @@ input[type="checkbox"] {
 .help-step {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 14px;
-    font-size: 26px;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 20px;
 }
 
 .help-step span {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 3px solid #111111;
     background: #f2cf4a;
     font-weight: bold;
+}
+
+/* 記述クイズページ専用: 全体を約80%、長い意味・答えは枠内に収める */
+.quiz-play-description .main-center {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.quiz-play-description .quiz-description-grid {
+    display: grid;
+    grid-template-columns: 560px 320px;
+    margin-top: 48px;
+    column-gap: 32px;
+    align-items: stretch;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+.quiz-play-description .quiz-description-grid > * {
+    min-width: 0;
+}
+
+.quiz-play-description .quiz-description-grid .box {
+    border-width: 5px;
+    border-radius: 14px;
+    box-shadow: 11px 11px 0 #000;
+}
+
+.quiz-play-description .descriptive-quiz {
+    padding: 32px;
+    box-sizing: border-box;
+}
+
+.quiz-play-description .question-area {
+    min-width: 0;
+}
+
+.quiz-play-description .section-title {
+    font-size: 19px;
+    margin-bottom: 13px;
+    padding-bottom: 5px;
+}
+
+.quiz-play-description .question-text {
+    font-size: 21px;
+    line-height: 1.45;
+    min-height: 48px;
+    max-height: min(38vh, 300px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    margin: 0;
+    color: #333;
+}
+
+.quiz-play-description .answer-area {
+    margin-top: 32px;
+}
+
+.quiz-play-description .answer-sheet {
+    padding: 24px 4px 6px;
+}
+
+.quiz-play-description .answer-input {
+    font-size: 24px;
+    border-bottom-width: 4px;
+}
+
+.quiz-play-description .result-panel {
+    gap: 21px;
+    padding: 32px;
+}
+
+.quiz-play-description .judge {
+    font-size: 24px;
+    min-height: 48px;
+    padding-top: 48px;
+    padding-bottom: 16px;
+}
+
+.quiz-play-description .answer-text {
+    font-size: 21px;
+    width: 100%;
+    max-width: 100%;
+    max-height: min(24vh, 220px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.quiz-play-description .submit-btn {
+    font-size: 16px;
+    padding: 8px 32px;
+    border-width: 2px;
+    border-radius: 11px;
+}
+
+.quiz-play-description .progress-bar {
+    height: 13px;
+    border-width: 2px;
+    border-radius: 8px;
+}
+
+.quiz-play-description .quiz-tags {
+    gap: 19px;
+    margin-top: 8px;
+    margin-bottom: -24px;
+}
+
+.quiz-play-description .tag {
+    padding: 11px 21px 11px 40px;
+    font-size: 18px;
+    border-width: 3px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0 #000;
+}
+
+.quiz-play-description .tag::after {
+    left: 11px;
+    width: 10px;
+    height: 10px;
+    border-width: 2px;
+}
+
+/* 記述・択一プレイ: ←クイズトップを同じ見た目に */
+.quiz-play-description .back-btn,
+.quiz-play-choice .back-btn {
+    margin: 16px 0 0 32px;
+    padding: 8px 19px;
+    font-size: 16px;
+    border-width: 3px;
+    border-radius: 11px;
+    box-shadow: 5px 5px 0 #000;
+}
+
+.quiz-play-description #finishMessage {
+    width: 560px;
+    max-width: calc(100vw - 32px);
+    padding: 64px 32px;
+    margin-top: 80px;
+    box-sizing: border-box;
+}
+
+.quiz-play-description .finish-title {
+    font-size: 34px;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.quiz-play-description .finish-buttons {
+    gap: 32px;
+}
+
+.quiz-play-description .finish-buttons .play-btn {
+    width: 176px;
+    height: 64px;
+    font-size: 19px;
+}
+
+/* 択一と同じブレークポイントで1列化・幅は従来の560系デザインを維持 */
+@media (max-width: 1200px) {
+    .quiz-play-description .quiz-description-grid {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        max-width: min(560px, calc(100vw - 32px));
+        margin-inline: auto;
+        row-gap: 24px;
+    }
+
+    .quiz-play-description .choice-descriptive-quiz {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .quiz-play-description .quiz-description-grid > .result-panel {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .quiz-play-description .back-btn,
+    .quiz-play-choice .back-btn {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .quiz-play-description .quiz-tags,
+    .quiz-play-choice .quiz-tags {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
 }

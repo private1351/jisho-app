@@ -118,28 +118,61 @@ button {
   margin-bottom: 30px;
 }
 
-/* ヘッダー全体 */
-header {
+/* アプリ共通ヘッダー（スクロールしても画面上部に固定） */
+/* main-header / quiz-header は高さ・余白・ホームアイコンを同一 */
+header.main-header,
+header.quiz-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 80px;
-  z-index: 1000; /* 最前面に表示 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 影で浮かせる*/
+  height: 64px;
+  box-sizing: border-box;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* ホームを左固定 */
-header > a {
+/* main_header が </head> 直後にあるページ：本文がヘッダー下に潜らないようにする */
+header.main-header + body {
+  padding-top: 64px;
+}
+
+/* クイズページで body 内に quiz-header がある場合 */
+body.quiz-body:has(.quiz-header) {
+  padding-top: 64px;
+}
+
+header.main-header > a,
+header.quiz-header > a {
   text-decoration: none;
-  font-size: 30px;
-  padding-left: 30px;
+  font-size: 24px;
+  padding-left: 24px;
 }
 
 /* navを右に寄せる */
 .nav {
   display: flex;
-  padding-right: 40px;
+  padding-right: 32px;
+}
+
+header.main-header .menu-list,
+header.quiz-header .menu-list {
+  gap: 8px;
+}
+
+header.main-header .menu-item:not(:last-child)::after,
+header.quiz-header .menu-item:not(:last-child)::after {
+  margin-left: 8px;
+}
+
+header.main-header .app-header-user,
+header.quiz-header .app-header-user {
+  font-size: 30px;
+  gap: 8px;
 }
 
 .main-header {
@@ -179,6 +212,7 @@ header > a {
 /* ===== ヘッダー用（白文字） ===== */
 .menu-header .menu-item a {
   color: #fff;
+  font-size: 20px;
 }
 
 .menu-header .menu-item:not(:last-child)::after {
@@ -222,22 +256,25 @@ header > a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 520px;
+  width: 480px;
   max-width: calc(100vw - 32px);
-  padding: 28px 24px;
+  max-height: min(85vh, 680px);
+  padding: 18px 20px 16px;
   background: #fffef7;
   border: 0.5px solid #222222;
-  border-radius: 16px;
+  border-radius: 14px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow-y: auto;
+  z-index: 1;
 }
 
 .user-modal-close {
   position: absolute;
-  top: 10px;
-  right: 12px;
+  top: 8px;
+  right: 10px;
   border: none;
   background: transparent;
   font-size: 28px;
@@ -246,37 +283,51 @@ header > a {
 }
 
 .user-modal-title {
-  margin: 0 0 10px 0;
-  font-size: 26px;
+  margin: 0 0 6px 0;
+  padding-right: 28px;
+  font-size: 22px;
   font-weight: bold;
   color: #333333;
 }
 
+.user-modal-content form {
+  margin: 0;
+}
+
 .user-modal-section,
 .user-modal-form {
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid #ddd;
-    width: 80%;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+  width: 88%;
+}
+
+/* ログアウト用 form（クラスなし）も他ブロックと揃える */
+.user-modal-content > form:has(> .user-modal-logout-button) {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+  width: 88%;
+  box-sizing: border-box;
 }
 
 .user-modal-label {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   color: #333333;
 }
 
 .user-modal-value,
 .user-modal-note {
-  font-size: 20px;
+  font-size: 15px;
   color: #333333;
 }
 
 .user-modal-input {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 10px 12px;
+  margin-bottom: 6px;
+  padding: 8px 10px;
   box-sizing: border-box;
   border: 1px solid #222222;
   border-radius: 5px;
@@ -284,10 +335,15 @@ header > a {
   font-size: 16px;
 }
 
+.user-modal-form .user-modal-input:last-of-type {
+  margin-bottom: 2px;
+}
+
 .user-modal-action-button,
 .user-modal-logout-button {
   width: 100%;
-  padding: 12px 16px;
+  padding: 9px 14px;
+  margin: 2px 0 0;
   border: 1px solid #222222;
   border-radius: 5px;
   font-weight: bold;
@@ -295,7 +351,6 @@ header > a {
 }
 
 .user-modal-logout-button {
-  margin-top: 10px;
   background-color: #d9d9d9 !important;
   color: #333333 !important;
 }
@@ -305,15 +360,15 @@ header > a {
 }
 
 .user-current {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   text-align: center;
   color: #333333;
 }
 
 .user-status-label {
-  margin-left: 8px;
-  font-size: 16px;
+  margin-left: 6px;
+  font-size: 13px;
   padding: 2px 8px;
   border-radius: 999px;
   background: #333333;

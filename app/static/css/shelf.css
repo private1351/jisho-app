@@ -1,34 +1,42 @@
 .shelf-layout {
     position: relative;
     width: 100%;
-    min-height: 100vh;
 }
 
 .shelf-center {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 60px;
+    margin-top: 128px;
 }
 
 .dictionary-shelf-container {
     display: grid;
 
-    --tile-w: 120px;
-    --tile-h: 160px;
+    --tile-w: 110px;
+    --tile-h: 147px;
+    /* 隣り合う表紙の横のすきま（列間のみ一定） */
+    --shelf-gap-x: 16px;
+    --shelf-gap-y: 16px;
 
-    grid-template-columns: repeat(5, var(--tile-w));
+    /* 列幅は最大 --tile-w（狭いときだけ1列が親幅に縮む）。隣接する本の横の間は column-gap のみ */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--tile-w)), var(--tile-w)));
     grid-auto-rows: var(--tile-h);
-    gap: 16px;
+    column-gap: var(--shelf-gap-x);
+    row-gap: var(--shelf-gap-y);
+    justify-content: center;
 
-    padding: 20px;
+    padding: 16px;
+    width: 60%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .dictionary-shelf-tile {
     position: relative;
-    width: var(--tile-w);
+    width: 100%;
     height: var(--tile-h);
-    margin: 0 auto;
+    margin: 0;
 }
 
 .dictionary-shelf-tile .dictionary-shelf-item {
@@ -45,29 +53,29 @@
 
 /* hoverで浮く */
 .dictionary-book:hover {
-    transform: translateY(-10px) scale(1.04);
-    box-shadow: 0 14px 0 #F7F6EB;
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 11px 0 #F7F6EB;
 }
 
 /* 押したとき */
 .dictionary-book:active {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 6px 0 #F7F6EB;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 5px 0 #F7F6EB;
 }
 
 .favorite-toggle {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 28px;
-    height: 28px;
+    top: 7px;
+    right: 7px;
+    width: 24px;
+    height: 24px;
     padding: 0;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.15);
     background: #ffffff;
     cursor: pointer;
     line-height: 1;
-    font-size: 16px;
+    font-size: 14px;
     color: #666666;
 }
 
@@ -82,13 +90,13 @@
 
 .shelf-edit-link {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    padding: 4px 8px;
-    border-radius: 8px;
+    bottom: 7px;
+    right: 7px;
+    padding: 4px 7px;
+    border-radius: 6px;
     background: rgba(255, 255, 255, 0.92);
     color: #333333;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     text-decoration: none;
     border: 1px solid rgba(0, 0, 0, 0.12);
@@ -99,10 +107,10 @@
 }
 
 .shelf-clear-button {
-    padding: 4px 8px;
-    border-radius: 6px;
+    padding: 3px 6px;
+    border-radius: 5px;
     border: 1px solid #cccccc;
-    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'Hiragino 明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ 明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
     color: #333333;
     background: #ffffff;
     cursor: pointer;
@@ -118,15 +126,15 @@
 
 .shelf-palette {
     position: fixed;
-    right: 200px;
-    top: 200px;
-    width: 250px;
-    padding: 0 12px 12px 12px;
+    right: 160px;
+    top: 160px;
+    width: 200px;
+    padding: 0 10px 10px 10px;
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 10px;
-    box-shadow: 4px 6px 12px rgba(0,0,0,0.15);
-    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'Hiragino 明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
+    border-radius: 8px;
+    box-shadow: 3px 5px 10px rgba(0,0,0,0.15);
+    font-family: 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'ヒラギノ明朝 ProN', 'ヒラギノ 明朝 Pro', 'Yu Mincho', '游明朝', 'MS 明朝', 'MS Mincho', serif;
     color: #333333;
     z-index: 50;
     align-items: center;
@@ -134,16 +142,16 @@
 }
 
 .shelf-palette-header {
-    width: calc(100% + 24px);
-    margin: 0 -12px 12px -12px;
-    padding: 10px 18px;
+    width: calc(100% + 20px);
+    margin: 0 -10px 10px -10px;
+    padding: 8px 14px;
     box-sizing: border-box;
     background: linear-gradient(to bottom, #3f3f3f, #222222);
     color: #ffffff;
-    font-size: 15px;
+    font-size: 12px;
     font-weight: bold;
     letter-spacing: 0.05em;
-    border-radius: 10px 10px 0 0;
+    border-radius: 8px 8px 0 0;
     border-bottom: 1px solid rgba(255,255,255,0.08);
     cursor: move;
     user-select: none;
@@ -157,27 +165,27 @@
 }
 
 .palette-section + .palette-section {
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .palette-color-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .palette-title {
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .palette-checkbox {
     display: flex;
     align-items: center;
-    font-size: 18px;
-    gap: 6px;
+    font-size: 14px;
+    gap: 5px;
     user-select: none;
 }
 
@@ -185,7 +193,7 @@
 .shelf-palette .color-picker {
     margin: 0;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
@@ -197,26 +205,26 @@
 
 .palette-radio-group {
     display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
+    gap: 5px;
+    margin-bottom: 8px;
 }
 
 .palette-radio {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     user-select: none;
 }
 
 /* △/▽ トグル */
 .order-toggle {
-    width: 80%;
-    padding: 6px 8px;
-    border-radius: 8px;
+    width: 64%;
+    padding: 5px 6px;
+    border-radius: 6px;
     border: 1px solid #cccccc;
     background: #333333;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1;
 }
 
@@ -228,29 +236,30 @@
 @media (max-width: 900px) {
     .shelf-palette {
         position: static;
-        width: 540px;
-        margin: 12px auto 0 auto;
+        width: min(100%, 880px);
+        max-width: calc(100vw - 24px);
+        margin: 10px auto 0 auto;
         box-sizing: border-box;
     }
 }
 
 .dictionary-shelf-item {
-    width: var(--tile-w);
-    height: var(--tile-h);
-    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
     font-weight: bold;
     color: #ffffff;
     text-align: center;
     margin: 0 auto;
-    border-radius: 8px;
-        box-shadow: 4px 6px 12px rgba(0,0,0,0.3);
+    border-radius: 6px;
+        box-shadow: 3px 5px 10px rgba(0,0,0,0.3);
     text-decoration: none;
 
     /* タイトルが長くてもタイルサイズが崩れないようにする */
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 8px;
     box-sizing: border-box;
     overflow: hidden;
 }

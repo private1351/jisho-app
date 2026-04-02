@@ -11,7 +11,6 @@ from flask import (
     abort,
 )
 from flask_login import login_user, logout_user, login_required, current_user
-
 from . import db
 from .models import Dictionary, User
 from .form import LoginForm, RegistrationForm
@@ -275,9 +274,9 @@ def quiz_menu():
 
 @main.route("/quiz-play/<dict_id>/<int:quiz_type>")
 def quiz_play(dict_id, quiz_type):
+    dictionary = Dictionary.query.get_or_404(dict_id)
     words = dictionary_service.list_words_for_dict(dict_id)
-    d = Dictionary.query.filter(Dictionary.id == dict_id).first()
-    dict_name = d.title if d else ""
+    dict_name = dictionary.title
 
     if quiz_type == 1:
         quiz_data = quiz_service.build_choice_quiz_data(words)
@@ -294,6 +293,7 @@ def quiz_play(dict_id, quiz_type):
             dict_id=dict_id,
             quiz_type=quiz_type,
             dict_name=dict_name,
+            dictionary=dictionary,
         )
     return redirect(url_for("main.quiz_menu"))
 

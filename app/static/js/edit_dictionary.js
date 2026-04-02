@@ -69,7 +69,7 @@ const colorValue = dot.dataset.color || dot.style.backgroundColor;
 function adjustTextareaHeight() {
     coverTitle.style.height = 'auto';
     const scrollHeight = coverTitle.scrollHeight;
-    const maxHeight = 80; // max-heightと同じ値
+    const maxHeight = 64; // max-heightと同じ値（book.css .cover-title）
     coverTitle.style.height = Math.min(scrollHeight, maxHeight) + 'px';
 }
 

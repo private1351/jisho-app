@@ -5,7 +5,7 @@
         {% endwith %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
     </head>
-    <body class="quiz-body">
+    <body class="quiz-body quiz-play-choice">
         <a href="{{ url_for('main.quiz_menu') }}" class="back-btn">
             ←クイズトップ
         </a>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <!-- 右側 進行度 -->
-                <div class="quiz-menu-container box result-panel" id="progressContainer">
+                <div class="result-panel-container box result-panel" id="progressContainer">
                     <div class="progress">
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill"></div>

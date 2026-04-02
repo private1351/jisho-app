@@ -5,24 +5,24 @@
         {% endwith %}
         <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
     </head>
-    <body class="quiz-body">
+    <body class="quiz-body quiz-play-description">
         <a href="{{ url_for('main.quiz_menu') }}" class="back-btn">
             ←クイズトップ
         </a>
         <div class="main-center fade-in">
             <div class="quiz-tags">
-                <div class="tag dict">{{ dict_name }}</div>
+                <div class="tag dict">{{ dictionary.title }}</div>
                 <div class="tag type">記述式</div>
             </div>
+            <input type="hidden" id="dict_id" value="{{ dict_id }}">
             <div class="quiz-description-grid" id="quizGrid">
                 <!-- 左側 出題-->
-                <input type="hidden" id="dict_id" value="{{ dict_id }}">
-                <div class="descriptive-quiz box">
+                <div class="choice-descriptive-quiz box">
                     <div class="question-area">
                         <div class="section-title">問題</div>
                         <p class="question-text" id="question">ここに問題文が入ります。</p>
                     </div>
-                    <div class="answer-area">
+                    <div class="choice-answer-area">
                         <div class="section-title">解答 (Enterで送信)</div>
                         <div class="answer-sheet">
                             <input type="text" class="answer-input" id="answerInput" placeholder="ここに解答を入力">
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <!-- 右側 進行度-->
-                <div class="quiz-menu-container box result-panel" id="progressContainer">
+                <div class="result-panel-container box result-panel" id="progressContainer">
                     <div class="progress">
                         <div class="progress-bar">
                             <div class="progress-fill" id="progressFill"></div>
@@ -38,7 +38,7 @@
                         <div id="judge" class="judge">ここに正誤判定</div>
                         <button id="showAnswerBtn" class="submit-btn">答えを見る</button>
                         <button id="hideAnswerBtn" class="submit-btn">答えを隠す</button>
-                        <p id="answer" class="answer-text" style="font-size: 30px;">ここに答え</p>
+                        <p id="answer" class="answer-text">ここに答え</p>
                     </div>
                 </div>
             </div>

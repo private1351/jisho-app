@@ -13,7 +13,7 @@
         document.body.appendChild(span);
 
         const width = span.offsetWidth;
-        input.style.width = Math.max(10, Math.min(200, width + 4)) + 'px';
+        input.style.width = Math.max(8, Math.min(160, width + 3)) + 'px';
 
         document.body.removeChild(span);
     }
